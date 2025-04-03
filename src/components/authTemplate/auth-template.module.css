@@ -1,0 +1,119 @@
+.left {
+  width: 90%;
+  max-width: 600px;
+  margin: auto;
+  padding-top: 10%;
+  .logo_container {
+    .logo_text {
+      color: var(--primary-color);
+      font-size: 30px;
+      font-weight: 900;
+      text-align: center;
+    }
+  }
+  .body_container {
+    padding-top: 80px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .header {
+      color: var(--dark-color);
+      font-size: 22px;
+      margin-bottom: 15px;
+    }
+    .paragraph {
+      color: var(--dark-color);
+      font-size: 14px;
+      line-height: 20px;
+      margin-bottom: 20px;
+    }
+    /* .form_container {
+        display: flex;
+        gap: 15px;
+        flex-direction: column;
+        margin-bottom: 20px;
+        input {
+          height: 50px;
+          font-size: 16px;
+          color: var(--dark-color);
+          background-color: var(--gray-color);
+          border: none;
+          padding-left: 40px;
+          margin-bottom: 7px;
+          font-weight: 500;
+        }
+        .input_email {
+          background-image: url("../../assets/icons/email_icon.svg");
+          background-repeat: no-repeat;
+          background-position: 10px center;
+        }
+        .input_password {
+          background-image: url("../../assets/icons/password_icon.svg");
+          background-repeat: no-repeat;
+          background-position: 10px center;
+        }
+        .forgot_password {
+          color: var(--primary-color);
+          text-align: right;
+          font-size: 14px;
+          margin-bottom: 10px;
+        }
+        .signin_button {
+          height: 50px;
+          background-color: #1faee9;
+          font-size: 14px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-weight: 800;
+        }
+      } */
+    .or {
+      font-size: 18px;
+      text-align: center;
+      color: var(--dark-color);
+      margin-bottom: 20px;
+    }
+
+    .create_account {
+      color: var(--dark-color);
+      font-size: 14px;
+      text-align: center;
+      .sign_up {
+        color: var(--primary-color);
+      }
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .left {
+    .logo_container {
+      .logo_text {
+        font-size: 32px;
+        text-align: left;
+      }
+    }
+    .body_container {
+      .header {
+        font-size: 24px;
+      }
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  .left {
+    padding-top: 0;
+    width: 40%;
+
+    .logo_container {
+      .logo_text {
+        font-size: 32px;
+        text-align: left;
+      }
+    }
+  }
+}

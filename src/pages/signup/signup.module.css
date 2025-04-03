@@ -1,0 +1,33 @@
+@import "../../global.css";
+
+.container {
+  background-color: #f8f8f8;
+  height: 100%;
+  
+  .right {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  /* .container {
+
+  } */
+}
+
+@media (min-width: 1024px) {
+  .container {
+    display: flex;
+flex-direction: row-reverse;
+	
+    .right {
+      display: block;
+      width: 50%;
+      background: radial-gradient(
+        circle at top left,
+        #25beff,
+        var(--primary-color)
+      );
+    }
+  }
+}

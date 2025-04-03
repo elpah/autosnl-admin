@@ -1,0 +1,18 @@
+  .images_container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      align-items: center;
+      color: black;
+      margin-bottom: 25px;
+
+      .image_container {
+        border: 1px solid #7a7979;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 150%;
+        width: 45px;
+        height: 45px;
+      }
+    }

@@ -1,18 +1,72 @@
-  .images_container {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      align-items: center;
-      color: black;
-      margin-bottom: 25px;
+.socials_div_container {
+  display: flex;
+  gap: 2%;
+  margin-top: 10px;
+  margin-bottom: 25px;
+  flex-direction: row;
 
-      .image_container {
-        border: 1px solid #7a7979;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 150%;
-        width: 45px;
-        height: 45px;
+  .socials_button {
+    cursor: pointer;
+    width: 48%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--gray-color);
+    padding: 10px 0;
+    border-radius: 2px;
+
+    .buttonName {
+      color: rgb(17, 17, 17);
+      font-size: 15px;
+      margin-left: 10px;
+    }
+  }
+
+  .image_container {
+    border: 1px solid #7a7979;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 150%;
+    width: 45px;
+    height: 45px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .socials_div_container {
+    .socials_button {
+      &:hover {
+        background-color: var(--gray-color-hover);
       }
     }
+  }
+}
+
+@media (min-width: 1200px) {
+  .socials_div_container {
+    .socials_button {
+      height: 35px;
+      .buttonName {
+        font-size: 18px;
+      }
+    }
+  }
+}
+
+@media (min-width: 1400px) {
+  .socials_div_container {
+    .socials_button {
+      height: 50px;
+
+      .icon_container {
+        img {
+          height: 35px;
+        }
+      }
+      .buttonName {
+        font-size: 22px;
+      }
+    }
+  }
+}

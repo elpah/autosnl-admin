@@ -1,9 +1,9 @@
 import styles from "./auth-button.module.css";
 
-type IAuthButtonProps = {
+type IButtonProps = {
   text: string;
 };
-const AuthButton = ({ text }: IAuthButtonProps) => {
+const AuthButton = ({ text }: IButtonProps) => {
   return <button className={styles.auth_button}>{text}</button>;
 };
 

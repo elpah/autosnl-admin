@@ -1,13 +1,15 @@
 @import "../../global.css";
 
 header {
+  position: fixed;
+  top: 0;
   background-color: #fff;
   height: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
-
+  width: 100%;
+z-index: 9;
   nav {
     height: 100%;
     width: 90%;
@@ -35,6 +37,7 @@ header {
           height: 35px;
         }
         .notification_number {
+          color:#fff;
           background-color: green;
           border-radius: 150%;
           height: auto;
@@ -62,7 +65,7 @@ header {
   }
   .menu_container {
     transform: translateX(-100%);
-    transition: transform 0.4s ease-in-out;
+    transition: transform 0.2s ease-in-out;
     background-color: var(--gray-color);
     position: absolute;
     width: 100%;
@@ -120,7 +123,6 @@ header {
           }
           &.active_icon_others {
             fill: var(--gray-color);
-            /* stroke: var(--gray-color); */
           }
         }
       }
@@ -164,8 +166,6 @@ header {
       }
     }
     .menu_container {
-      /* padding-top: 40px; */
-
       .logo_close_container {
         .logo_text {
           font-size: 35px;
@@ -177,9 +177,9 @@ header {
 
 @media (min-width: 1024px) {
   header {
-    height: 100px;
-
     nav {
+      width: 70%;
+      margin-left: 25%;
       max-width: 1600px;
 
       .hamburger_container {
@@ -221,18 +221,18 @@ header {
       .notification_profile_icons {
         .notification_alert {
           .notification_icon {
-            height: 45px;
-            width: 45px;
+            height: 40px;
+            width: 40px;
           }
           .notification_number {
-            min-width: 18px;
-            min-height: 18px;
-            font-size: 12px;
+            min-width: 16px;
+            min-height: 16px;
+            font-size: 11px;
           }
         }
         .profile_icon {
-          height: 45px;
-          width: 45px;
+         height: 40px;
+            width: 40px;
         }
       }
     }

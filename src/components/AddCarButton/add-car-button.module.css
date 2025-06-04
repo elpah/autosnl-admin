@@ -1,0 +1,42 @@
+@import "../../global.css";
+
+.button {
+  height: 45px;
+  gap: 6px;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--primary-color);
+  margin: auto;
+  width: 100%;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.plus {
+  font-size: 18px;
+  line-height: 1;
+  display: inline-block;
+  padding-bottom: 4px;
+}
+
+@media (min-width: 1024px) {
+  .button {
+    width: 25%;
+    margin-right: 0;
+    margin-bottom: 40px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .button {
+    height: 50px;
+    font-size: 16px;
+  }
+
+  .plus {
+    font-size: 22px;
+  }
+}

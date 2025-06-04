@@ -1,15 +1,17 @@
+import { useNavigate } from "react-router-dom";
 import AuthButton from "../../components/authButton/AuthButton";
 import AuthForm from "../../components/authForm/AuthForm";
 import AuthTemplate from "../../components/authTemplate/AuthTemplate";
 import styles from "./signup.module.css";
 
 const SignUp = () => {
+  const navigate = useNavigate()
   return (
     <div className={styles.container}>
       <AuthTemplate
+      handleSubSpanClick={()=>navigate('/signin')}
+        orText="or sign up with"
         logoHeader="ZaurAutos"
-        signInUpHeader="Sign Up to ZaurAutos"
-        signInUpText=" Enter your details to create an account"
         subText="Already have an account? "
         subSpanText="Sign in"
       >

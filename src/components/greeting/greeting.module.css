@@ -1,0 +1,22 @@
+@import "../../global.css";
+
+.goodmorning_container {
+  margin-bottom: 30px;
+  color: var(--dark-color);
+  p {
+    font-size: 14px;
+    margin-bottom: 7px;
+  }
+  h2 {
+    font-size: 18px;
+    font-weight: 500;
+  }
+}
+
+
+@media (min-width: 1024px)
+{
+.goodmorning_container{
+  display: none;
+}
+}

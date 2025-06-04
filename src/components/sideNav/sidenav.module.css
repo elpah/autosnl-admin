@@ -1,0 +1,179 @@
+.nav_container {
+  display: none;
+
+  @media (min-width: 1024px) {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    top: 0;
+    left: 0;
+    width: 20%;
+    z-index: 10;
+    overflow-y: auto;
+    background-color: #1d2026;
+    padding-bottom: 25px;
+
+    &::-webkit-scrollbar {
+      width: 1px;
+      height: 1px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #1d2026;
+      border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: #1d2026;
+    }
+
+    .logo_container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-bottom: 0.1px solid var(--gray-color);
+      height: 100px;
+
+      h2 {
+        color: var(--primary-color);
+        font-size: 28px;
+      }
+    }
+
+    .ul_container {
+      ul {
+        li {
+          cursor: pointer;
+          padding: 0 20px;
+          display: flex;
+          align-items: center;
+          gap: 7px;
+          height: 55px;
+          font-size: 16px;
+          color: #bababa;
+
+          &.active {
+            background-color: var(--primary-color);
+            color: var(--gray-color);
+          }
+
+          .icon {
+            width: 25px;
+            height: 25px;
+
+            &.active_icon {
+              stroke: var(--gray-color);
+            }
+
+            &.active_icon_others {
+              fill: var(--gray-color);
+            }
+          }
+        }
+      }
+
+      div {
+        padding: 0 20px;
+        margin: auto;
+        margin-top: 50vh;
+        display: flex;
+        align-items: center;
+        height: 50px;
+        font-size: 16px;
+        gap: 7px;
+        cursor: pointer;
+        color: #bababa;
+
+        &.active {
+          background-color: var(--primary-color);
+          color: var(--gray-color);
+        }
+
+        .icon {
+          width: 25px;
+          height: 25px;
+
+          &.active_icon {
+            stroke: var(--gray-color);
+          }
+
+          &.active_icon_others {
+            fill: var(--gray-color);
+          }
+        }
+
+        p {
+          color: #bababa;
+          &.active {
+            color: var(--gray-color);
+          }
+        }
+      }
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .logo_container {
+      h2 {
+        /* font-size: 30px; */
+      }
+    }
+
+    .ul_container {
+      ul {
+        li {
+          gap: 10px;
+          height: 60px;
+          font-size: 20px;
+          .icon {
+            width: 28px;
+            height: 28px;
+          }
+        }
+      }
+
+      div {
+        height: 60px;
+        font-size: 20px;
+        gap: 10px;
+
+        .icon {
+          width: 28px;
+          height: 28px;
+        }
+      }
+    }
+  }
+
+  @media (min-width: 1400px) {
+    .ul_container {
+      ul {
+        li {
+     
+          font-size: 22px;
+          .icon {
+            width: 30px;
+            width: 30px;
+          }
+        }
+      }
+
+      div {
+        font-size: 22px;
+        gap: 10px;
+
+        .icon {
+          width: 30px;
+          width: 30px;
+        }
+      }
+    }
+  }
+}
+
+@-moz-document url-prefix() {
+  .nav_container {
+    scrollbar-width: thin;
+    scrollbar-color: #cac9c9 #f2efef;
+  }
+}

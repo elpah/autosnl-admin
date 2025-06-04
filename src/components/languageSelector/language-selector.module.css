@@ -1,0 +1,71 @@
+@import "../../global.css";
+
+.language_selector {
+  width: 100%;
+  margin-bottom: 20px;
+  p {
+    display: block;
+    margin-bottom: 20px;
+    font-size: 13px;
+  }
+  .language_div {
+    width: 100%;
+    display: flex;
+    color: var(--dark-color);
+    justify-content: space-between;
+    &.active {
+      border-color: var(--primary-color);
+      outline: none;
+    }
+    p {
+      font-size: 12px;
+      border-bottom: 3px solid #bababa;
+      width: 24%;
+      padding-bottom: 5px;
+      &.active {
+        border-bottom: 3px solid var(--primary-color);
+      }
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  .language_selector {
+    padding: 0 30px;
+    box-sizing: border-box;
+    border-bottom: 0.7px solid var(--gray-color);
+    margin-bottom: 40px;
+
+    p {
+      /* font-size: 14px; */
+    }
+    .language_div {
+      p {
+        margin-bottom: 0;
+        font-size: 13px;
+        border-bottom: none;
+        padding-bottom: 15px;
+        &.active {
+          border-bottom: 2px solid var(--primary-color);
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 1200px) {
+  .language_selector {
+    padding: 0 35px;
+
+    p {
+		font-weight: 500;
+		margin-bottom:25px;
+    }
+    .language_div {
+      p {
+        font-size: 14px;
+		font-weight: 500;
+      }
+    }
+  }
+}

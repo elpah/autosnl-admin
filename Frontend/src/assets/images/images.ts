@@ -1,24 +1,24 @@
-import hamburger_open from "../images/icons/hamburger_open.svg";
-import hamburger_close from "../images/icons/hamburger_close.svg";
-import fb_icon from "../images/icons/fb_icon.svg";
-import google_icon from "../images/icons/google_icon.svg";
-import bell_icon from "../images/icons/bell_icon.svg";
+import hamburger_open from "./icons/hamburger_open.svg";
+import hamburger_close from "./icons/hamburger_close.svg";
+import fb_icon from "./icons/fb_icon.svg";
+import google_icon from "./icons/google_icon.svg";
+import bell_icon from "./icons/bell_icon.svg";
 
-import total_cars from "../images/icons/total_cars.svg";
-import total_used from "../images/icons/total_used.svg";
-import total_damaged from "../images/icons/total_damaged.svg";
-import total_dealers from "../images/icons/total_dealers.svg";
-import dealer_map from "../images/icons/dealer_map.svg";
-import advanced_map from "../images/icons/advanced_map.svg";
+import total_cars from "./icons/total_cars.svg";
+import total_used from "./icons/total_used.svg";
+import total_damaged from "./icons/total_damaged.svg";
+import total_dealers from "./icons/total_dealers.svg";
+import dealer_map from "./icons/dealer_map.svg";
+import advanced_map from "./icons/advanced_map.svg";
 
 
-import dropdown_icon from "../images/icons/dropdown_icon.svg";
-import upload_icon from "../images/icons/upload.png"
+import dropdown_icon from "./icons/dropdown_icon.svg";
+import upload_icon from "./icons/upload.png"
 
-import basic_map from "../images/icons/basic_map.svg";
+import basic_map from "./icons/basic_map.svg";
 
 //delete late
-import profile_icon from "../images/icons/passport_placeholder.jpg";
+import profile_icon from "./icons/passport_placeholder.jpg";
 
 import body from "./carPageImages/body.svg";
 import color from "./carPageImages/color.svg";

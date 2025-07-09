@@ -1,0 +1,34 @@
+.car_mobile_container_wrapper {
+  width: 100%;
+  .car_mobile_container {
+    width: 90%;
+    margin: auto;
+
+    .damages_card_container {
+      margin-bottom: 30px;
+    }
+    .options_container {
+      margin-bottom: 30px;
+    }
+  }
+  .dealer_details_container {
+    margin-bottom: 30px;
+  }
+}
+
+@media (min-width: 500px) {
+  .car_mobile_container_wrapper {
+    padding-top: 30px;
+    .car_mobile_container {
+      .car_info_cards_container {
+        gap: 25px;
+      }
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .car_mobile_container_wrapper {
+    display: none;
+  }
+}

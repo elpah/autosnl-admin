@@ -1,0 +1,83 @@
+@import "../../../global.css";
+
+.car_price_container {
+  margin-top: 31px;
+  margin-bottom: 27px;
+
+  .price_header {
+    color: #4c4c4c;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .inc_btw_price_container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+
+    .inc_btw_price {
+      color: var(--primary-color);
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .inc_btw_price_text {
+      color: #4c4c4c;
+      font-size: 12px;
+      font-weight: 500;
+    }
+  }
+
+  .sub_price_container {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 5px;
+
+    .sub_price {
+      color: var(--primary-color);
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .sub_price_text {
+      color: #4c4c4c;
+      font-size: 10px;
+      font-weight: 400;
+    }
+  }
+}
+
+@media (min-width: 500px) {
+  .car_price_container {
+    .price_header {
+      font-size: 24px;
+    }
+    .inc_btw_price_container {
+      .inc_btw_price {
+        font-size: 20px;
+      }
+      .inc_btw_price_text {
+        font-weight: 600;
+      }
+    }
+    .sub_price_container {
+      .sub_price {
+        font-weight: 600;
+        font-size: 16px;
+      }
+      .sub_price_text {
+        font-size: 12px;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+@media (min-width: 500px) {
+  .car_price_container {
+    margin-top: 0;
+  }
+}

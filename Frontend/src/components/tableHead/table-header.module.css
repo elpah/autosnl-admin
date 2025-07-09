@@ -1,0 +1,45 @@
+@import "../../global.css";
+
+.container {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .container {
+    box-sizing: border-box;
+    display: flex;
+    background-color: #fff;
+    border-bottom: 1px solid #e9eaf0;
+    padding: 10px;
+    width: 100%;
+    font-size: 10px;
+    color: var(--dark-color);
+    justify-content: space-between;
+    align-items: center;
+    height: 40px;
+    .cars {
+      width: 53%;
+    }
+
+    .prices {
+      width: 15%;
+    }
+    .actions {
+      width: 38%;
+    }
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    height: 50px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+}
+
+@media (min-width: 1400px) {
+  .container {
+    font-size: 14px;
+  }
+}

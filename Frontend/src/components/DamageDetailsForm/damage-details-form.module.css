@@ -1,0 +1,33 @@
+.container {
+  border: 1px solid var(--dark-color);
+  padding: 10px;
+  box-sizing: border-box;
+  .details {
+    border: 0.1px solid var(--primary-color);
+    padding: 10px;
+    box-sizing: border-box;
+    .textarea {
+      resize: none;
+      height: 80px;
+      overflow-y: auto;
+      background-color: #fff;
+      color: var(--dark-color);
+      width: 100%;
+      padding: 10px;
+      box-sizing: border-box;
+      border: 0.5px solid #bbb;
+      outline: none;
+      font-size: 14px;
+      &:focus {
+        border: 0.5px solid var(--primary-color);
+      }
+    }
+
+    .delete {
+      color: #fff;
+      margin-top: 5px;
+      background-color: red;
+    }
+    margin-bottom: 10px;
+  }
+}

@@ -1,0 +1,141 @@
+@import "../../../global.css";
+
+.cover_info_container {
+  width: 100%;
+  .header_container {
+    position: relative;
+
+    .car_image_cover_container {
+      width: 100%;
+      background-color: #e4e4e4;
+      overflow: hidden;
+      max-height: 500px;
+      display: flex;
+      align-items: center;
+      .car_image_container {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        .car_image {
+          width: 100%;
+          object-fit: cover;
+          flex-shrink: 0;
+          flex-grow: 0;
+          object-fit: fill;
+        }
+      }
+    }
+    .image_container {
+      background-color: #fff;
+      border-radius: 50%;
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      top: 50%;
+      transform: translateY(-50%);
+
+      .icon {
+        width: 15px;
+        height: 15px;
+      }
+    }
+
+    .next_image_container {
+      right: 2%;
+      cursor: pointer;
+    }
+
+    .prev_image_container {
+      left: 2%;
+      cursor: pointer;
+    }
+  }
+  .three_dots {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    justify-content: center;
+    margin-top: 10px;
+
+    .dot {
+      border-radius: 50%;
+      width: 6px;
+      height: 6px;
+      background-color: #e4e4e4;
+    }
+
+    .dot_current {
+      background-color: var(--primary-color);
+    }
+  }
+  .car_images_container {
+    display: none;
+  }
+}
+
+@media (min-width: 500px) {
+  .cover_info_container {
+    .header_container {
+      .image_container {
+        width: 45px;
+        height: 45px;
+      }
+    }
+    .three_dots {
+      margin-bottom: 40px;
+      gap: 8px;
+      .dot {
+        width: 12px;
+        height: 12px;
+      }
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .cover_info_container {
+    .three_dots {
+      display: none;
+    }
+    .car_images_container {
+      margin-top: 31px;
+      display: flex;
+      flex-wrap: no-wrap;
+      /* justify-content: space-between; */
+      gap: 15px;
+      .next_image_container {
+        width: 70px;
+        position: relative;
+        /* flex: 0 1 calc(25% - 10px); */
+
+        box-sizing: border-box;
+        .next_image {
+          width: 100%;
+          height: 100%;
+          display: block;
+        }
+        .overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.6);
+          color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1rem;
+          font-weight: bold;
+          border-radius: 4px;
+          z-index: 1;
+        }
+      }
+    }
+  }
+}

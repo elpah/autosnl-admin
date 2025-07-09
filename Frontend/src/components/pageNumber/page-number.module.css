@@ -1,0 +1,80 @@
+@import "../../global.css";
+
+.next_cars_container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1px;
+  .car_page_number {
+    font-size: 15px;
+    padding: 10px;
+
+    cursor: pointer;
+    color: #4c4c4c;
+    font-weight: 500;
+  }
+
+  .hide {
+    display: none;
+  }
+  .three_dots {
+    display: flex;
+    gap: 5px;
+    font-size: 15px;
+  }
+  .current_page_number {
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .next_icon_container {
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+    .next_icon {
+      padding: 10px;
+      width: 13px;
+      height: 13px;
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .next_cars_container {
+    gap: 10px;
+    .car_page_number {
+      font-size: 20px;
+    }
+    .three_dots {
+      gap: 11px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .current_page_number {
+      width: 25px;
+      height: 25px;
+    }
+    .next_icon_container {
+      .next_icon {
+        padding: 12px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  .next_cars_container {
+    margin-top: 60px;
+}}

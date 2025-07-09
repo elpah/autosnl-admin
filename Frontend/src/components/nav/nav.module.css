@@ -1,0 +1,243 @@
+@import "../../global.css";
+
+header {
+  position: fixed;
+  top: 0;
+  background-color: #fff;
+  height: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 80px;
+  z-index: 9;
+  nav {
+    height: 100%;
+    width: 90%;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .hamburger_container {
+      .greeting_name_container {
+        display: none;
+      }
+      .hamburger_icon {
+        width: 35px;
+        height: 35px;
+      }
+    }
+    .notification_profile_icons {
+      display: flex;
+      gap: 20px;
+      .notification_alert {
+        position: relative;
+        .notification_icon {
+          width: 35px;
+          height: 35px;
+        }
+        .notification_number {
+          color: #fff;
+          background-color: green;
+          border-radius: 150%;
+          height: auto;
+          width: auto;
+          min-width: 13px;
+          min-height: 13px;
+          aspect-ratio: 1 / 1;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          position: absolute;
+          top: -4px;
+          right: 0px;
+          font-weight: 700;
+          padding: 1px;
+          font-size: 8px;
+        }
+      }
+      .profile_icon {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+      }
+    }
+  }
+  .menu_container {
+    transform: translateX(-100%);
+    transition: transform 0.2s ease-in-out;
+    background-color: var(--gray-color);
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    padding-top: 25px;
+    z-index: 1000;
+    &.menu_open {
+      transform: translateX(0);
+    }
+
+    &.menu_closed {
+      transform: translateX(-100%);
+    }
+    .logo_close_container {
+      width: 90%;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 50px;
+
+      .logo_text {
+        color: var(--primary-color);
+        font-size: 30px;
+      }
+      .hamburger_close {
+        width: 30px;
+        height: 30px;
+      }
+    }
+    .ul_container {
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      color: #b8b6b6;
+      li {
+        list-style: none;
+        display: flex;
+        align-items: center;
+        height: 80px;
+        gap: 15px;
+        padding: 0 5% 0 5%;
+        color: var(--dark-color);
+        &.active {
+          background-color: var(--primary-color);
+          color: var(--gray-color);
+        }
+        p {
+          font-size: 25px;
+        }
+        .icon {
+          width: 35px;
+          height: 35px;
+          &.active_icon {
+            stroke: var(--gray-color);
+          }
+          &.active_icon_others {
+            fill: var(--gray-color);
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  header {
+    height: 100px;
+
+    nav {
+      max-width: 1600px;
+
+      .hamburger_container {
+        .hamburger_icon {
+          width: 40px;
+          height: 40px;
+        }
+      }
+      .notification_profile_icons {
+        gap: 30px;
+        .notification_alert {
+          .notification_icon {
+            height: 35px;
+            width: 35px;
+          }
+          .notification_number {
+            background-color: green;
+
+            min-width: 15px;
+            min-height: 15px;
+
+            font-weight: 800;
+          }
+        }
+        .profile_icon {
+          width: 35px;
+          height: 35px;
+        }
+      }
+    }
+    .menu_container {
+      .logo_close_container {
+        .logo_text {
+          font-size: 35px;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  header {
+    nav {
+      width: 70%;
+      margin-left: 25%;
+      max-width: 1600px;
+
+      .hamburger_container {
+        .greeting_name_container {
+          display: flex;
+          gap: 7px;
+          flex-direction: column;
+          color: var(--dark-color);
+
+          .greetings {
+            font-size: 16px;
+          }
+          .name {
+            font-size: 20px;
+          }
+        }
+        .hamburger_icon {
+          display: none;
+        }
+      }
+    }
+  }
+}
+@media (min-width: 1400px) {
+  header {
+    nav {
+      max-width: 1600px;
+
+      .hamburger_container {
+        .greeting_name_container {
+          .greetings {
+            font-size: 18px;
+          }
+          .name {
+            font-size: 24px;
+          }
+        }
+      }
+      .notification_profile_icons {
+        .notification_alert {
+          .notification_icon {
+            height: 40px;
+            width: 40px;
+          }
+          .notification_number {
+            min-width: 16px;
+            min-height: 16px;
+            font-size: 11px;
+          }
+        }
+        .profile_icon {
+          height: 40px;
+          width: 40px;
+        }
+      }
+    }
+  }
+}

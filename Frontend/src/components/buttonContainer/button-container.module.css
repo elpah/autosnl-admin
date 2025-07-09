@@ -1,0 +1,40 @@
+@import "../../global.css";
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 10px;
+  button {
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 15px;
+  }
+  .previous {
+    color: var(--dark-color);
+    border: 1px solid #bababa;
+    background-color: #fff;
+  }
+  .save {
+    color: #fff;
+    background-color: var(--primary-color);
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    flex-direction: row-reverse;
+    justify-content: space-between;
+
+    button {
+      width: 25%;
+    }
+    .previous {
+      border: 1px solid var(--gray-color);
+    }
+    /* .save {
+   
+  } */
+  }
+}

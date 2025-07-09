@@ -1,0 +1,35 @@
+.auth_button {
+  height: 50px;
+  /* background-color: #1faee9; */
+  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  transition: all 0.1s ease;
+  border-radius: 2px;
+  /* color: #fff; */
+}
+
+@media (min-width: 1024px) {
+  .auth_button {
+    &:hover {
+      background-color: #00a0e4;
+    }
+  }
+}
+
+@media (min-width: 1200px) {
+  .auth_button {
+    height: 52px;
+    font-size: 17px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .auth_button {
+    height: 60px;
+    font-size: 20px;
+    font-weight: 600;
+  }
+}

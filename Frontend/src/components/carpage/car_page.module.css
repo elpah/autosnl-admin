@@ -1,0 +1,49 @@
+@import "../../global.css";
+
+.car_page_container {
+  width: 100%;
+  min-height: 100vh;
+  margin: auto;
+  background-color: #fff;
+  padding-top: 10px;
+  .language_select_container{
+    display: flex;
+    gap: 10px;
+    margin:  10px ;
+
+    div{
+      padding: 5px;
+      color: var(--dark-color);
+      border: 0.5px solid var(--primary-color);
+    }
+    .current_selection{
+      background-color:var(--primary-color);
+      color: #fff;
+      font-weight: 600;
+    }
+  }
+  .car_map_container {
+    width: 90%;
+    max-width: 1700px;
+    margin: auto;
+    padding-top: 25px;
+    margin-bottom: 12px;
+    display: flex;
+    gap: 5px;
+    color: #4c4c4c;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 500;
+
+    .map_name {
+      cursor: pointer;
+      &:hover {
+        color: var(--primary-color);
+      }
+    }
+
+    .current_car {
+      color: var(--primary-color);
+    }
+  }
+}

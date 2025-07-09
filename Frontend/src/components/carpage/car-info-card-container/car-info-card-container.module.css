@@ -1,0 +1,19 @@
+.car_info_cards_container {
+  width: 100%;
+  display: grid;
+  gap: 15px;
+  grid-template-columns: repeat(2, 1fr);
+  margin-bottom: 30px;
+}
+
+@media (min-width: 500px) {
+  .car_info_cards_container {
+    gap: 25px;
+  }
+}
+
+@media (min-width: 768px) {
+  .car_info_cards_container {
+    margin-top: 45px;
+  }
+}

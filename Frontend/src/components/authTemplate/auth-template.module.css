@@ -1,0 +1,161 @@
+.left {
+
+  width: 90%;
+  /* flex: 1; */
+  /* padding: 1rem; */
+  max-width: 600px;
+  margin: auto;
+  padding-top: 10%;
+  .logo_container {
+    .logo_text {
+      color: var(--primary-color);
+      font-size: 30px;
+      font-weight: 900;
+      text-align: center;
+    }
+  }
+  .body_container {
+    padding-top: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    .or_container {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 0.5rem 0;
+
+      .line {
+        flex: 1;
+        height: 1px;
+        background-color: #ccc;
+      }
+
+      .or_text {
+        padding: 0.3rem;
+        color: var(--dark-color);
+        font-size: 0.9rem;
+        white-space: nowrap;
+      }
+    }
+
+    .create_account {
+      color: var(--dark-color);
+      font-size: 14px;
+      text-align: center;
+      .sign_up {
+        color: var(--primary-color);
+      }
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .left {
+    .logo_container {
+      .logo_text {
+        font-size: 32px;
+        text-align: left;
+      }
+    }
+    .body_container {
+      .create_account {
+        .sign_up {
+          cursor: pointer;
+          &:hover {
+            color: var(--primary-color-hover);
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  .left {
+    padding-top: 0;
+    width: 40%;
+
+    .logo_container {
+      .logo_text {
+        font-size: 32px;
+        text-align: left;
+      }
+    }
+  }
+}
+
+@media (min-width: 1200px) {
+  .left {
+    .logo_container {
+      .logo_text {
+        font-size: 36px;
+      }
+    }
+    .body_container {
+      .or_container {
+        margin-bottom: 20px;
+
+        .or_text {
+          font-size: 1rem;
+        }
+      }
+
+      .create_account {
+        font-size: 16px;
+        margin-top: 10px;
+      }
+    }
+  }
+}
+
+@media (min-width: 1400px) {
+  .left {
+    .logo_container {
+      .logo_text {
+        font-size: 36px;
+      }
+    }
+    .body_container {
+      .paragraph {
+        font-size: 22px;
+        line-height: 33px;
+      }
+
+      .or_container {
+        margin-bottom: 30px;
+
+        .or_text {
+          font-size: 1.4rem;
+        }
+      }
+
+      .create_account {
+        font-size: 22px;
+        margin-top: 10px;
+      }
+    }
+  }
+}
+/* 
+@media (min-width: 1400px) {
+  .body_container {
+     .paragraph {
+        font-size: 30px;
+        color: red;
+      }
+
+    .or_container {
+      margin-bottom: 20px;
+
+      .or_text {
+        font-size: 1rem;
+      }
+    }
+
+    .create_account {
+      font-size: 16px;
+      margin-top: 10px;
+    }
+  }
+} */

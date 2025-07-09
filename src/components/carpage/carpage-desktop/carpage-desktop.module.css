@@ -1,0 +1,51 @@
+.car_page_desktop_container {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .car_page_desktop_container {
+    display: block;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: auto;
+    margin-top: 21px;
+    width: 90%;
+    .left {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      width: 48%;
+    }
+    .right {
+      width: 48%;
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  .car_page_desktop_container {
+    width: 90%;
+    .left {
+      gap: 40px;
+      width: 54%;
+    }
+    .right {
+      width: 42%;
+    }
+  }
+}
+/* 
+@media (min-width: 1200px) {
+  .car_page_desktop_container {
+    max-width: 1700px;
+    .left {
+      gap: 40px;
+      width: 54%;
+    }
+    .right {
+      width: 42%;
+    }
+  }
+} */

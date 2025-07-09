@@ -1,4 +1,6 @@
+import { useContext } from "react";
 import styles from "./button-container.module.css";
+import { GlobalContext } from "../../context/GlobalContext";
 type ButtonProps = {
   handleNextClick: () => void;
   handlePreviousClick: () => void;
@@ -7,6 +9,7 @@ const ButtonContainer = ({
   handleNextClick,
   handlePreviousClick,
 }: ButtonProps) => {
+  const globalContext = useContext(GlobalContext);
   return (
     <div className={styles.container}>
       <button
@@ -16,7 +19,7 @@ const ButtonContainer = ({
         }}
         className={styles.save}
       >
-        Save & Next
+        {globalContext.currentSelection === "Dealer" ? "Save" : "Next"}
       </button>
       <button
         onClick={(e) => {
@@ -24,6 +27,10 @@ const ButtonContainer = ({
           handlePreviousClick();
         }}
         className={styles.previous}
+        disabled={
+          globalContext.currentSelection === "Basic" &&
+          globalContext.currentLanguage === "en"
+        }
       >
         Previous
       </button>

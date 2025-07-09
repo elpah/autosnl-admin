@@ -4,6 +4,10 @@ const getBrandModelsCountries = async () => {
   try {
     const db = await connectToDatabase();
     const col = db.collection("cars");
+    const colCountries = db.collection("countries");
+    const colBodyTypes = db.collection("bodyTypes");
+    const colFuels = db.collection("fuels");
+    const colTransmissions = db.collection("transmissions");
 
     const pipelineBrandsModels = [
       {
@@ -14,7 +18,7 @@ const getBrandModelsCountries = async () => {
             brand_nl: "$lang.nl.carBrand",
             brand_ua: "$lang.ua.carBrand",
             model_en: "$lang.en.carModel",
-            model_ru: "$lang.ru.carModel",
+            model_ru: "$lang.fru.carModel",
             model_nl: "$lang.nl.carModel",
             model_ua: "$lang.ua.carModel",
           },
@@ -52,89 +56,78 @@ const getBrandModelsCountries = async () => {
       },
     ];
 
-    const pipelineMetadata = [
-      {
-        $group: {
-          _id: null,
-          countries: {
-            $addToSet: {
-              en: "$lang.en.carCountry",
-              ru: "$lang.ru.carCountry",
-              nl: "$lang.nl.carCountry",
-              ua: "$lang.ua.carCountry",
-            },
-          },
-          fuels: {
-            $addToSet: {
-              en: "$lang.en.carFuel",
-              ru: "$lang.ru.carFuel",
-              nl: "$lang.nl.carFuel",
-              ua: "$lang.ua.carFuel",
-            },
-          },
-          bodies: {
-            $addToSet: {
-              en: "$lang.en.carBody",
-              ru: "$lang.ru.carBody",
-              nl: "$lang.nl.carBody",
-              ua: "$lang.ua.carBody",
-            },
-          },
-        },
-      },
-      {
-        $project: { _id: 0, countries: 1, fuels: 1, bodies: 1 },
-      },
-    ];
-
     const brandsModelsResult = await col
       .aggregate(pipelineBrandsModels)
       .toArray();
-    const metadataResult = await col.aggregate(pipelineMetadata).toArray();
+
+    // Fetch countries directly from the countries collection
+    const countries = await colCountries.find().toArray();
+    const bodies = await colBodyTypes.find().toArray();
+    const fuels = await colFuels.find().toArray();
+    const transmissions = await colTransmissions.find().toArray();
 
     let formattedResult = { brands: {}, countries: {}, fuel: {}, body: {} };
 
-    brandsModelsResult
-      .sort((a, b) => a.brand.en.localeCompare(b.brand.en))
-      .forEach(({ brand, models }) => {
-        let brandKey = brand.en.toLowerCase();
-        if (!formattedResult.brands[brandKey]) {
-          formattedResult.brands[brandKey] = {
-            name: brand,
-            models: {},
+    brandsModelsResult.forEach(({ brand, models }) => {
+      let brandKey = brand.en.toLowerCase();
+      if (!formattedResult.brands[brandKey]) {
+        formattedResult.brands[brandKey] = {
+          name: brand,
+          models: {},
+        };
+      }
+
+      models.forEach((model) => {
+        let modelKey = model.en.toLowerCase();
+        if (!formattedResult.brands[brandKey].models[modelKey]) {
+          formattedResult.brands[brandKey].models[modelKey] = {
+            en: model.en,
+            ru: model.ru || model.en,
+            nl: model.nl || model.en,
+            ua: model.ua || model.en,
           };
         }
+      });
+    });
 
-        models.forEach((model) => {
-          let modelKey = model.en.toLowerCase();
-          if (!formattedResult.brands[brandKey].models[modelKey]) {
-            formattedResult.brands[brandKey].models[modelKey] = {
-              en: model.en,
-              ru: model.ru || model.en,
-              nl: model.nl || model.en,
-              ua: model.ua || model.en,
-            };
-          }
-        });
-      });
-    metadataResult[0].countries
-      .sort((a, b) => a.en.localeCompare(b.en))
-      .forEach((country) => {
-        let key = country.en.toLowerCase();
-        formattedResult.countries[key] = country;
-      });
-    metadataResult[0].fuels
-      .sort((a, b) => a.en.localeCompare(b.en))
-      .forEach((fuel) => {
-        let key = fuel.en.toLowerCase();
-        formattedResult.fuel[key] = fuel;
-      });
-    metadataResult[0].bodies
-      .sort((a, b) => a.en.localeCompare(b.en))
-      .forEach((body) => {
-        let key = body.en.toLowerCase();
-        formattedResult.body[key] = body;
-      });
+    const countryObject = {};
+    const bodyObject = {};
+    const fuelObject = {};
+    const transmissionObject = {};
+
+    countries.forEach((entry) => {
+      const [key, value] = Object.entries(entry).find(
+        ([k]) => k !== "id" && k !== "_id"
+      );
+      countryObject[key] = value;
+    });
+
+    transmissions.forEach((entry) => {
+      const [key, value] = Object.entries(entry).find(
+        ([k]) => k !== "id" && k !== "_id"
+      );
+      transmissionObject[key] = value;
+    });
+
+    bodies.forEach((entry) => {
+      const [key, value] = Object.entries(entry).find(
+        ([k]) => k !== "id" && k !== "_id"
+      );
+      bodyObject[key] = value;
+    });
+
+    fuels.forEach((entry) => {
+      const [key, value] = Object.entries(entry).find(
+        ([k]) => k !== "id" && k !== "_id"
+      );
+      fuelObject[key] = value;
+    });
+
+    formattedResult.countries = countryObject;
+    formattedResult.body = bodyObject;
+    formattedResult.fuel = fuelObject;
+    formattedResult.transmission = transmissionObject;
+
     return formattedResult;
   } catch (error) {
     console.error("Error retrieving car metadata:", error);

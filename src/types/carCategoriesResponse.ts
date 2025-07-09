@@ -1,7 +1,7 @@
 export type CarTranslation = {
   en: string;
-  ru: string;
   nl: string;
+  ru: string;
   ua: string;
 };
 
@@ -33,9 +33,14 @@ type Bodies = {
   [bodyType: string]: Body;
 };
 
+type transmissionTypes = {
+  [bodyType: string]: Body;
+};
+
 export type ICarCategoriesResponse = {
   brands: Brands;
   countries: Countries;
   fuel: FuelTypes;
   body: Bodies;
+  transmission: transmissionTypes;
 };

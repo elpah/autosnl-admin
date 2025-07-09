@@ -11,18 +11,21 @@ import {
 } from "./context/GlobalContext";
 
 import "./App.css";
-import { Suspense, useState, useTransition } from "react";
+import { Suspense, useState } from "react";
 
 function App() {
   const [currentLanguage, setCurrentLanguage] = useState<
     "en" | "ru" | "nl" | "ua"
   >("en");
+  const [carPageLang, setCarPageLang] = useState<"en" | "ru" | "nl" | "ua">(
+    "en"
+  );
   const [currentSelection, setCurrentSelection] = useState<
     "Basic" | "Advanced" | "Dealer"
   >("Basic");
   const [carData, setCarData] = useState<ICarData>(initialCarData);
   const [activeMenu, setActiveMenu] = useState<
-    "dashboard" | "cars" | "settings" | "sign out"
+    "dashboard" | "cars" | "settings" | "preview" | "sign out"
   >("dashboard");
   const [other, setOther] = useState<IOther>(initialOther);
   return (
@@ -31,6 +34,8 @@ function App() {
         value={{
           currentLanguage,
           setCurrentLanguage,
+          carPageLang,
+          setCarPageLang,
           carData,
           setCarData,
           activeMenu,

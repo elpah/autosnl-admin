@@ -17,23 +17,26 @@ import {
 import LanguageSelector from "../languageSelector/LanguageSelector";
 import ButtonContainer from "../buttonContainer/ButtonContainer";
 import styles from "./add-car.module.css";
-// import useBrandModel from "../../hooks/useBrandModel";
+import useCreateCar from "../../hooks/useCreateCar";
+import { handleScrollToTop } from "../../utils/utilFunctions";
 
 const AddCars = () => {
   const globalContext = useContext(GlobalContext);
+  const { mutate, isPending, isError, isSuccess, error } = useCreateCar();
   // const { data, isLoading } = useBrandModel();
 
   const handleNext = () => {
+    handleScrollToTop();
     const requiredBasicFields = [
-      // "carCategory",
-      // "carBrand",
-      // "carModel",
-      // "carBody",
-      // "carColor",
-      // "carTransmission",
-      // "carCountry",
-      // "carFuel",
-      // "carVanish",
+      "carCategory",
+      "carBrand",
+      "carModel",
+      "carBody",
+      "carColor",
+      "carTransmission",
+      "carCountry",
+      "carFuel",
+      "carVanish",
     ] as const;
 
     const requiredAdvancedFields: Array<keyof ICarData> = [
@@ -73,30 +76,65 @@ const AddCars = () => {
       return false;
     });
 
-    if (missingBasicFields.length > 0) {
-      alert(
-        `Please fill out all required fields before proceeding:\n${missingBasicFields.join(
-          ", "
-        )}`
-      );
-      return;
+    if (globalContext.currentSelection === "Basic") {
+      if (globalContext.currentLanguage === "en") {
+        globalContext.setCurrentLanguage("nl");
+      } else if (globalContext.currentLanguage === "nl") {
+        globalContext.setCurrentLanguage("ru");
+      } else if (globalContext.currentLanguage === "ru") {
+        globalContext.setCurrentLanguage("ua");
+      } else if (globalContext.currentLanguage === "ua") {
+        globalContext.setCurrentSelection("Advanced");
+      }
     }
-    // all basic fields are filled and advanced fields are not filled
-
-    if (missingBasicFields.length === 0 && missingAdvancedFields.length > 0) {
-      globalContext.setCurrentSelection("Advanced");
-      alert("All required fields are filled, now fill advanced Fields.");
-      return;
-    }
-
-    if (missingBasicFields.length === 0 && missingAdvancedFields.length === 0) {
+    if (globalContext.currentSelection === "Advanced") {
       globalContext.setCurrentSelection("Dealer");
-      return;
+    }
+    if (globalContext.currentSelection === "Dealer") {
+      if (missingBasicFields.length > 0 || missingAdvancedFields.length > 0)
+        alert(
+          `Please fill out all required fields before proceeding:\n${missingBasicFields.join(
+            ", "
+          )}
+            \n${missingAdvancedFields.join(", ")}`
+        );
+      else {
+        mutate(globalContext.carData, {
+          onSuccess: () => {
+            alert("Car successfully added!");
+          },
+          onError: (err) => {
+            alert("Something went wrong while submitting.");
+            console.error(err);
+          },
+        });
+      }
     }
   };
 
   const handlePrev = () => {
-    console.log("clicked");
+ 
+    if(globalContext.currentLanguage!== "en" && globalContext.currentSelection !== "Basic")
+    {handleScrollToTop();}
+
+
+    if (globalContext.currentSelection === "Dealer") {
+      globalContext.setCurrentSelection("Advanced");
+    } else if (globalContext.currentSelection === "Advanced") {
+      globalContext.setCurrentSelection("Basic");
+    } else {
+      if (globalContext.currentSelection === "Basic") {
+        if (globalContext.currentLanguage === "ua") {
+          globalContext.setCurrentLanguage("ru");
+        } else if (globalContext.currentLanguage === "ru") {
+          globalContext.setCurrentLanguage("nl");
+        } else if (globalContext.currentLanguage === "nl") {
+          globalContext.setCurrentLanguage("en");
+        } else {
+          return;
+        }
+      }
+    }
   };
 
   const basicInfoTags = {
@@ -204,6 +242,8 @@ const AddCars = () => {
             handlePreviousClick={handlePrev}
           />
         </AddCarForm>
+
+        {isPending ? "Submitting form" : "sucess .. handle properly later"}
       </section>
     </div>
   );

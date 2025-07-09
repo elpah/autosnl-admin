@@ -15,6 +15,7 @@ import {
 import AddCars from "../../components/addCarSection/AddCars";
 import { GlobalContext } from "../../context/GlobalContext";
 import styles from "./dashboard.module.css";
+import CarPage from "../../components/carpage/CarPage";
 
 const Dashboard = () => {
   const globalContext = useContext(GlobalContext);
@@ -65,6 +66,8 @@ const Dashboard = () => {
 
             {/* Add Account/setting Section */}
             {globalContext.activeMenu === "settings" && <SettingsSection />}
+            {globalContext.activeMenu === "preview" && <CarPage />}
+
 
             {/* Adding Cars */}
           </div>

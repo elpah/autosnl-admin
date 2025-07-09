@@ -11,7 +11,7 @@ export type CarOptionCategories = {
   lighting: string[];
 };
 
-type CarDamage = {
+export type CarDamage = {
   title: string;
   text: string;
 };
@@ -40,15 +40,24 @@ export type CarTranslationFields = {
   carOptions: CarOptionCategories;
 };
 
+export type IDealer = {
+  isOther: boolean;
+  dealerId?: string;
+  dealerName?: string;
+  dealerEmail?: string;
+  dealerPhone?: string;
+  dealerAddress?: string;
+};
+
 export const emptyCarTranslationFields: CarTranslationFields = {
   carCategory: "",
   carBrand: "",
   carModel: "",
+  carCountry: "",
   carDetails: "",
   carBody: "",
   carColor: "",
   carTransmission: "",
-  carCountry: "",
   carFuel: "",
   carVanish: "",
   carDamageDetails: [],
@@ -92,6 +101,15 @@ export const initialCarData: ICarData = {
   price_excl_bpm: 0,
   carVat: 0,
   carNumberOfDoors: "0",
+  carWeight: "",
+  dealer: {
+    isOther: false,
+    dealerName: "",
+    dealerId: "",
+    dealerAddress: "",
+    dealerEmail: "",
+    dealerPhone: "",
+  },
 };
 
 export type ICarData = {
@@ -113,18 +131,24 @@ export type ICarData = {
   price_excl_bpm: number;
   carVat: number;
   carNumberOfDoors: string;
+  carWeight: string;
+  dealer: IDealer;
 };
 
 export type Lang = "en" | "nl" | "ru" | "ua";
 
 export interface IGlobalContext {
   currentLanguage: Lang;
+  carPageLang: Lang;
+  setCarPageLang: React.Dispatch<React.SetStateAction<Lang>>;
   setCurrentLanguage: React.Dispatch<React.SetStateAction<Lang>>;
   carData: ICarData;
   setCarData: React.Dispatch<React.SetStateAction<ICarData>>;
-  activeMenu: "dashboard" | "cars" | "settings" | "sign out";
+  activeMenu: "dashboard" | "cars" | "settings" | "preview" | "sign out";
   setActiveMenu: React.Dispatch<
-    React.SetStateAction<"dashboard" | "cars" | "settings" | "sign out">
+    React.SetStateAction<
+      "dashboard" | "cars" | "settings" | "preview" | "sign out"
+    >
   >;
   currentSelection: "Basic" | "Advanced" | "Dealer";
   setCurrentSelection: React.Dispatch<
@@ -138,6 +162,8 @@ export interface IGlobalContext {
 export const GlobalContext = createContext<IGlobalContext>({
   currentLanguage: "en",
   setCurrentLanguage: () => {},
+  carPageLang: "en",
+  setCarPageLang: () => {},
   carData: initialCarData,
   setCarData: () => {},
   activeMenu: "dashboard",

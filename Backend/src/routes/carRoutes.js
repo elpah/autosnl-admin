@@ -3,18 +3,9 @@ import Router from "express";
 const carRouter = Router();
 
 import { getBrandModelsCountries } from "../services/brandModelCountryServices.js";
+import { getDealers } from "../services/dealersServices.js";
 
-carRouter.get("/testing-endpoint", async (req, res) => {
-  try {
-    res.status(200).send("Successfully reached endpoint!!!");
-  } catch (err) {
-    console.error("Error creating car:", err);
-    res.status(500).send(err.message);
-  }
-});
-
-
-const fetchCars = async (res, fetchFunction) => {
+const fetchRes = async (res, fetchFunction) => {
   try {
     const cars = await fetchFunction();
     res.status(200).json(cars);
@@ -23,8 +14,23 @@ const fetchCars = async (res, fetchFunction) => {
   }
 };
 
+carRouter.get("/", async (_req, res) => {
+  try {
+    res.status(200).send("Successfully reached endpoint!!!");
+  } catch (err) {
+    console.error("Error creating car:", err);
+    res.status(500).send(err.message);
+  }
+});
+
 carRouter.get("/brandmodelscountries", (_req, res) =>
-  fetchCars(res, getBrandModelsCountries)
+  fetchRes(res, getBrandModelsCountries)
 );
+
+carRouter.post("/add-car", (_req, res) =>
+  fetchRes(res, getBrandModelsCountries)
+);
+
+carRouter.get("/dealers", (_req, res) => fetchRes(res, getDealers));
 
 export default carRouter;

@@ -10,6 +10,7 @@ const addNewCar = async (carData) => {
     return newCar;
   } catch (err) {
     console.log(err);
+	return {}
   }
 };
 

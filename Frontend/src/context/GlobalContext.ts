@@ -26,7 +26,7 @@ export type IOther = {
 };
 
 export type CarTranslationFields = {
-  carCategory: string;
+  carType: string;
   carBrand: string;
   carModel: string;
   carDetails: string;
@@ -41,7 +41,7 @@ export type CarTranslationFields = {
 };
 
 export type IDealer = {
-  isOther: boolean;
+  isOther?: boolean;
   dealerId?: string;
   dealerName?: string;
   dealerEmail?: string;
@@ -50,7 +50,7 @@ export type IDealer = {
 };
 
 export const emptyCarTranslationFields: CarTranslationFields = {
-  carCategory: "",
+  carType: "",
   carBrand: "",
   carModel: "",
   carCountry: "",
@@ -89,7 +89,6 @@ export const initialCarData: ICarData = {
     ru: { ...emptyCarTranslationFields },
     ua: { ...emptyCarTranslationFields },
   },
-  carType: "",
   carImages: [],
   carMileage: 0,
   carPower: "",
@@ -113,13 +112,13 @@ export const initialCarData: ICarData = {
 };
 
 export type ICarData = {
+  carId?;
   lang: {
     en: CarTranslationFields;
     nl: CarTranslationFields;
     ru: CarTranslationFields;
     ua: CarTranslationFields;
   };
-  carType: string;
   carImages: File[];
   carMileage: number;
   carPower: string;
@@ -132,11 +131,17 @@ export type ICarData = {
   carVat: number;
   carNumberOfDoors: string;
   carWeight: string;
-  dealer: IDealer;
+  dealer: IDealer | string;
 };
 
 export type Lang = "en" | "nl" | "ru" | "ua";
-
+export type MenuOption =
+  | "dashboard"
+  | "cars"
+  | "settings"
+  | "sign out"
+  | "add-car"
+  | null;
 export interface IGlobalContext {
   currentLanguage: Lang;
   carPageLang: Lang;
@@ -144,17 +149,12 @@ export interface IGlobalContext {
   setCurrentLanguage: React.Dispatch<React.SetStateAction<Lang>>;
   carData: ICarData;
   setCarData: React.Dispatch<React.SetStateAction<ICarData>>;
-  activeMenu: "dashboard" | "cars" | "settings" | "preview" | "sign out";
-  setActiveMenu: React.Dispatch<
-    React.SetStateAction<
-      "dashboard" | "cars" | "settings" | "preview" | "sign out"
-    >
-  >;
+  activeMenu: MenuOption;
+  setActiveMenu: React.Dispatch<React.SetStateAction<MenuOption>>;
   currentSelection: "Basic" | "Advanced" | "Dealer";
   setCurrentSelection: React.Dispatch<
     React.SetStateAction<"Basic" | "Advanced" | "Dealer">
   >;
-
   other: IOther;
   setOther: React.Dispatch<React.SetStateAction<IOther>>;
 }

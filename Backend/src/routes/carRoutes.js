@@ -2,7 +2,7 @@ import "dotenv/config.js";
 import Router from "express";
 import multer from "multer";
 import { uploadImage } from "../services/cloudinary.js";
-import { addNewCar } from "../services/carServices.js";
+import { addNewCar, getAllCars, getCarById } from "../services/carServices.js";
 import { getBrandModelsCountries } from "../services/brandModelCountryServices.js";
 import {
   getDealers,
@@ -36,15 +36,34 @@ carRouter.get("/brandmodelscountries", (_req, res) =>
   fetchRes(res, getBrandModelsCountries)
 );
 
+carRouter.get("/get-car-by-id", async (req, res) => {
+  try {
+    const carId = req.query.carId;
+    console.log(carId);
+
+    if (!carId) {
+      return res.status(400).json({ message: "Missing carId query parameter" });
+    }
+
+    const car = await getCarById(carId);
+
+    if (!car) {
+      return res.status(404).json({ message: "Car not found" });
+    }
+    return res.status(200).json(car);
+  } catch (err) {
+    console.error("Error in /get-car-by-id:", err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+carRouter.put("/update-car", async (req, res) => {});
+
 carRouter.post("/add-car", upload, async (req, res) => {
   try {
     const carData = JSON.parse(req.body.carData);
     const carImages = req.files;
 
-    // console.log("images from frontend:", carImages);
-    // console.log("Car data:", carData);
-
-    // Upload Images
     const uploadedImages = await Promise.all(
       carImages.map(async (file) => {
         const uploaded = await uploadImage(file);
@@ -84,6 +103,21 @@ carRouter.post("/add-car", upload, async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Something went wrong" });
+  }
+});
+
+carRouter.get("/get-all-cars", async (req, res) => {
+  const page = req.query.pageNumber || 1;
+
+  if (page) {
+    console.log(page);
+  }
+
+  try {
+    const { totalCars, cars } = await getAllCars(page);
+    res.status(200).json({ totalCars, cars });
+  } catch (err) {
+    res.status(500).send("Internal Server Error");
   }
 });
 

@@ -1,7 +1,6 @@
 import cloudinary from "cloudinary";
 import { Readable } from "stream";
 
-
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,

@@ -11,7 +11,6 @@ import {
 } from "../services/dealerServices.js";
 
 const carRouter = Router();
-
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage }).array("carImages[]");
 

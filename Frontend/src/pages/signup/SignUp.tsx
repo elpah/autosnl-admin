@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import AuthButton from "../../components/authButton/AuthButton";
-import AuthForm from "../../components/authForm/AuthForm";
-import AuthTemplate from "../../components/authTemplate/AuthTemplate";
+import AuthButton from "../../components/auth-button/AuthButton";
+import AuthForm from "../../components/auth-form/AuthForm";
+import AuthTemplate from "../../components/auth-template/AuthTemplate";
 import styles from "./signup.module.css";
 
 const SignUp = () => {

@@ -1,0 +1,15 @@
+.total_cards_container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+@media (min-width: 1024px) {
+  .total_cards_container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+}

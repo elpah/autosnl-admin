@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { type ICarData } from "../context/GlobalContext";
 
-const useCreateCar = () => {
+const useUpdateCar = () => {
   return useMutation({
     mutationFn: async (carData: ICarData) => {
       const formData = new FormData();
@@ -15,7 +15,7 @@ const useCreateCar = () => {
 
       try {
         const response = await axios.post(
-          `${import.meta.env.VITE_API_URL}add-car`,
+          `${import.meta.env.VITE_API_URL}update-car`,
           formData,
           {
             headers: {
@@ -32,4 +32,4 @@ const useCreateCar = () => {
   });
 };
 
-export default useCreateCar;
+export default useUpdateCar;

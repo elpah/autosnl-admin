@@ -111,7 +111,7 @@ const deleteCarById = async (carId) => {
 
     await session.withTransaction(async () => {
       const car = await carCol.findOne(
-        { carId},
+        { carId },
         { projection: { _id: 0 }, session }
       );
       if (!car) {
@@ -142,4 +142,55 @@ const deleteCarById = async (carId) => {
     await session.endSession();
   }
 };
-export { addNewCar, getAllCars, getCarById, deleteCarById };
+
+const recommendCarById = async (carId) => {
+  const session = client.startSession();
+  let updatedIsRecommended;
+  try {
+    const db = await connectToDatabase();
+    const carCol = db.collection("cars");
+    const homeCol = db.collection("homeSections");
+
+    await session.withTransaction(async () => {
+      const car = await carCol.findOne({ carId: carId });
+      if (!car) {
+        throw new Error("Car not found.");
+      }
+
+      updatedIsRecommended = !car.isRecommended;
+
+      await carCol.updateOne(
+        { carId: carId },
+        { $set: { isRecommended: updatedIsRecommended } },
+        { session }
+      );
+
+      const updateQuery = updatedIsRecommended
+        ? { $addToSet: { recommended: carId } }
+        : { $pull: { recommended: carId } };
+
+      const updateResult = await homeCol.updateOne(
+        { type: "homeSections" },
+        updateQuery,
+        { session }
+      );
+      if (updateResult.modifiedCount === 0) {
+        throw new Error("homeSections document not found.");
+      }
+    });
+
+    return {
+      success: true,
+      message: `Car is now ${
+        updatedIsRecommended ? "recommended" : "unrecommended"
+      }.`,
+    };
+  } catch (err) {
+    console.error("Error recommending car:", err.message);
+    return { success: false, message: err.message };
+  } finally {
+    await session.endSession();
+  }
+};
+
+export { addNewCar, getAllCars, getCarById, deleteCarById, recommendCarById };

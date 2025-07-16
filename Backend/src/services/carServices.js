@@ -1,3 +1,5 @@
+import client from "../config/client.js";
+
 import { connectToDatabase } from "../config/db.js";
 import { randomUUID } from "crypto";
 
@@ -32,7 +34,7 @@ const getAllCars = async (page = 1) => {
   const skip = (page - 1) * limit;
 
   const projection = {
-    _id:0,
+    _id: 0,
     carId: 1,
     carImages: 1,
     "lang.en.carBrand": 1,
@@ -48,10 +50,8 @@ const getAllCars = async (page = 1) => {
     .limit(limit)
     .toArray();
 
-  const dealerIds = [
-    ...new Set(cars.map((car) => car.dealer).filter(Boolean)),
-  ];
-  
+  const dealerIds = [...new Set(cars.map((car) => car.dealer).filter(Boolean))];
+
   const dealers = await dealerCol
     .find({ dealerId: { $in: dealerIds } })
     .project({ dealerId: 1, dealerName: 1 })
@@ -63,13 +63,12 @@ const getAllCars = async (page = 1) => {
 
   const updatedCars = cars.map((car) => ({
     ...car,
-    carImages:[car.carImages[0]],
+    carImages: [car.carImages[0]],
     dealer: dealerMap[car.dealer] || null,
   }));
 
   return { totalCars, cars: updatedCars };
 };
-
 
 const getCarById = async (id) => {
   try {
@@ -77,10 +76,9 @@ const getCarById = async (id) => {
     const carCol = db.collection("cars");
     const dealerCol = db.collection("dealers");
 
+    const car = await carCol.findOne({ carId: id }, { projection: { _id: 0 } });
 
-    const car = await carCol.findOne({ carId: id }, { projection :{_id:0}});
-    if(car && car.dealer)
-    {
+    if (car && car.dealer) {
       const dealerInfo = await dealerCol.findOne(
         { dealerId: car.dealer },
         {
@@ -93,15 +91,55 @@ const getCarById = async (id) => {
           },
         }
       );
-      car.dealer = dealerInfo
+      car.dealer = dealerInfo;
     }
-
     return car;
   } catch (err) {
     console.error("Error in getCarById:", err.message);
-    return null; 
+    return null;
   }
 };
 
+const deleteCarById = async (carId) => {
+  const session = client.startSession();
 
-export { addNewCar, getAllCars, getCarById };
+  try {
+    const db = await connectToDatabase();
+    const carCol = db.collection("cars");
+    const dealerCol = db.collection("dealers");
+    const deletedCol = db.collection("deletedCars");
+
+    await session.withTransaction(async () => {
+      const car = await carCol.findOne(
+        { carId},
+        { projection: { _id: 0 }, session }
+      );
+      if (!car) {
+        throw new Error("Failed to retrieve car for deletion");
+      }
+
+      const insertToDelete = await deletedCol.insertOne(car, { session });
+      if (!insertToDelete.acknowledged) {
+        throw new Error("Failed to add deleted car to trash");
+      }
+
+      if (car.dealer) {
+        await dealerCol.updateOne(
+          { dealerId: car.dealer },
+          { $pull: { cars: carId } },
+          { session }
+        );
+      }
+
+      await carCol.deleteOne({ carId }, { session });
+    });
+
+    return { success: true, message: "Car deleted successfully." };
+  } catch (err) {
+    console.error("Error deleting car:", err.message);
+    return { success: false, message: err.message };
+  } finally {
+    await session.endSession();
+  }
+};
+export { addNewCar, getAllCars, getCarById, deleteCarById };

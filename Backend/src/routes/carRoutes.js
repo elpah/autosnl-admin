@@ -2,7 +2,13 @@ import "dotenv/config.js";
 import Router from "express";
 import multer from "multer";
 import { uploadImage } from "../services/cloudinary.js";
-import { addNewCar, getAllCars, getCarById } from "../services/carServices.js";
+import {
+  addNewCar,
+  getAllCars,
+  getCarById,
+  deleteCarById,
+  recommendCarById,
+} from "../services/carServices.js";
 import { getBrandModelsCountries } from "../services/brandModelCountryServices.js";
 import {
   getDealers,
@@ -117,6 +123,36 @@ carRouter.get("/get-all-cars", async (req, res) => {
     const { totalCars, cars } = await getAllCars(page);
     res.status(200).json({ totalCars, cars });
   } catch (err) {
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+carRouter.delete("/delete-car", async (req, res) => {
+  const carId = req.query.carId;
+  try {
+    const result = await deleteCarById(carId);
+    if (result.success) {
+      res.status(200).json({ message: result.message });
+    } else {
+      res.status(400).json({ message: result.message });
+    }
+  } catch (err) {
+    console.error("Error deleting car:", err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+carRouter.patch("/recommend-car", async (req, res) => {
+  const carId = req.query.carId;
+  try {
+    const result = await recommendCarById(carId);
+    if (result.success) {
+      res.status(200).json({ message: result.message });
+    } else {
+      res.status(400).json({ message: result.message });
+    }
+  } catch (err) {
+    console.error("Error recommending car:", err);
     res.status(500).send("Internal Server Error");
   }
 });

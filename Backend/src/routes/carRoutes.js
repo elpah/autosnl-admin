@@ -7,6 +7,7 @@ import {
   getAllCars,
   getCarById,
   deleteCarById,
+  recommendCarById,
 } from "../services/carServices.js";
 import { getBrandModelsCountries } from "../services/brandModelCountryServices.js";
 import {
@@ -137,6 +138,21 @@ carRouter.delete("/delete-car", async (req, res) => {
     }
   } catch (err) {
     console.error("Error deleting car:", err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+carRouter.patch("/recommend-car", async (req, res) => {
+  const carId = req.query.carId;
+  try {
+    const result = await recommendCarById(carId);
+    if (result.success) {
+      res.status(200).json({ message: result.message });
+    } else {
+      res.status(400).json({ message: result.message });
+    }
+  } catch (err) {
+    console.error("Error recommending car:", err);
     res.status(500).send("Internal Server Error");
   }
 });

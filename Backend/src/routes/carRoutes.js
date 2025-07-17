@@ -8,6 +8,8 @@ import {
   getCarById,
   deleteCarById,
   recommendCarById,
+  permanentDeleteCarById,
+  restoreCar
 } from "../services/carServices.js";
 import { getBrandModelsCountries } from "../services/brandModelCountryServices.js";
 import {
@@ -42,11 +44,9 @@ carRouter.get("/brandmodelscountries", (_req, res) =>
   fetchRes(res, getBrandModelsCountries)
 );
 
-carRouter.get("/get-car-by-id", async (req, res) => {
+carRouter.get("/get-car-by-id/:carId", async (req, res) => {
   try {
-    const carId = req.query.carId;
-    console.log(carId);
-
+    const { carId } = req.params;
     if (!carId) {
       return res.status(400).json({ message: "Missing carId query parameter" });
     }
@@ -114,25 +114,22 @@ carRouter.post("/add-car", upload, async (req, res) => {
 
 carRouter.get("/get-all-cars", async (req, res) => {
   const page = req.query.pageNumber || 1;
-
-  if (page) {
-    console.log(page);
-  }
-
+  const type = req.query.type;
+  // console.log(type);
   try {
-    const { totalCars, cars } = await getAllCars(page);
+    const { totalCars, cars } = await getAllCars(page,type);
     res.status(200).json({ totalCars, cars });
   } catch (err) {
     res.status(500).send("Internal Server Error");
   }
 });
 
-carRouter.delete("/delete-car", async (req, res) => {
-  const carId = req.query.carId;
+carRouter.delete("/delete-car/:carId", async (req, res) => {
+  const { carId } = req.params;
   try {
     const result = await deleteCarById(carId);
     if (result.success) {
-      res.status(200).json({ message: result.message });
+      res.status(200).json({ message: "Car deleted successfully" });
     } else {
       res.status(400).json({ message: result.message });
     }
@@ -141,6 +138,38 @@ carRouter.delete("/delete-car", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+carRouter.patch("/restore-car/:carId", async (req, res) => {
+  const { carId } = req.params;
+  try {
+    const result = await restoreCar(carId);
+    if (result.success) {
+      res.status(200).json({ message: "Car Restored successfully" });
+    } else {
+      res.status(400).json({ message: result.message });
+    }
+  } catch (err) {
+    console.error("Error restoring car:", err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+
+carRouter.delete("/permanent-delete-car/:carId", async (req, res) => {
+  const { carId } = req.params;
+  try {
+    const result = await permanentDeleteCarById(carId);
+    if (result.success) {
+      res.status(200).json({ message: "Car deleted successfully" });
+    } else {
+  res.status(400).json({ message: result.message });
+    }
+  } catch (err) {
+    console.error("Error deleting car:", err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 
 carRouter.patch("/recommend-car", async (req, res) => {
   const carId = req.query.carId;

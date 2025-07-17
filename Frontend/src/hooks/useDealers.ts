@@ -10,6 +10,7 @@ const useDealers = () => {
   return useQuery<IDealerResponse[], Error>({
     queryKey: ["dealers"],
     queryFn: fetchDealers,
+    refetchOnWindowFocus: false,
     // staleTime: Infinity,
   });
 };

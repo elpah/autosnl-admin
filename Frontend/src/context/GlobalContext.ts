@@ -109,6 +109,7 @@ export const initialCarData: ICarData = {
     dealerEmail: "",
     dealerPhone: "",
   },
+  isRecommended: false,
 };
 
 export type ICarData = {
@@ -132,8 +133,10 @@ export type ICarData = {
   carNumberOfDoors: string;
   carWeight: string;
   dealer: IDealer | string;
+  isRecommended?: boolean;
 };
 
+export type currentActionType = "isEditing" | "isAdding" | null;
 export type Lang = "en" | "nl" | "ru" | "ua";
 export type MenuOption =
   | "dashboard"
@@ -142,6 +145,7 @@ export type MenuOption =
   | "sign out"
   | "add-car"
   | null;
+
 export interface IGlobalContext {
   currentLanguage: Lang;
   carPageLang: Lang;
@@ -157,6 +161,12 @@ export interface IGlobalContext {
   >;
   other: IOther;
   setOther: React.Dispatch<React.SetStateAction<IOther>>;
+  currentAction: currentActionType;
+  setCurrentAction: React.Dispatch<React.SetStateAction<currentActionType>>;
+  showModal: boolean;
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  pendingLink: string | null;
+  setPendingLink: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 export const GlobalContext = createContext<IGlobalContext>({
@@ -172,4 +182,10 @@ export const GlobalContext = createContext<IGlobalContext>({
   setCurrentSelection: () => {},
   other: initialOther,
   setOther: () => {},
+  currentAction: null,
+  setCurrentAction: () => {},
+  showModal: false,
+  setShowModal: () => {},
+  pendingLink: null,
+  setPendingLink: () => {},
 });

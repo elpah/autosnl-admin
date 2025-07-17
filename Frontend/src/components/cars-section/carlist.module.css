@@ -7,11 +7,12 @@ padding-bottom: 50px;
     flex-direction: row;
     justify-content: space-between;
     .category_name {
+      cursor: pointer;
       display: flex;
       justify-content: center;
       align-items: center;
       width: 50%;
-      border-bottom: 3px solid #1d2026;
+      border-bottom: 3px solid #bbb;
       padding: 13px;
       box-sizing: border-box;
       p {

@@ -12,6 +12,7 @@ const useBrandModel = () => {
   return useQuery<ICarCategoriesResponse, Error>({
     queryKey: ["categories"],
     queryFn: fetchCategories,
+    refetchOnWindowFocus: false,
     // staleTime: Infinity,
   });
 };

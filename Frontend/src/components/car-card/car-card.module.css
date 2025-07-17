@@ -59,6 +59,7 @@
         justify-content: center;
         font-weight: 500;
       }
+
       .edit_delete_button {
         display: flex;
         justify-content: space-between;
@@ -76,12 +77,31 @@
           color: #fff;
         }
       }
+
       .recommend_button {
         background-color: var(--primary-color);
         color: #fff;
         width: 100%;
       }
+      
+      .restore{
+        background-color: var(--primary-color);
+        color: #fff;
+        &:hover{
+          background-color: var(--primary-color-hover);
+        }
+
+      }
+      .delete_forever{
+        color: #fff;
+        background-color: red;
+        &:hover{
+          background-color: rgb(213, 0, 0);
+        }
+      }
     }
+
+
   }
 }
 

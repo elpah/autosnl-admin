@@ -1,0 +1,62 @@
+.modal_dark_layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+
+  .box {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+
+    .paragraph {
+      font-size: 1rem;
+      line-height: 1.5;
+      color: #333;
+      margin-bottom: 1.5rem;
+    }
+
+    .button_container {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+
+      .proceed,
+      .cancel {
+        flex: 1;
+        padding: 0.75rem 1rem;
+        border: none;
+        border-radius: 6px;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+      }
+
+      .proceed {
+        color: white;
+        background-color: var(--proceed-color);
+        &:hover {
+          background-color: var(--proceed-hover-color);
+        }
+      }
+
+      .cancel {
+        color: #333;
+        background-color: var(--cancel-color);
+        &:hover {
+          background-color: var(--cancel-hover-color);
+        }
+      }
+    }
+  }
+}

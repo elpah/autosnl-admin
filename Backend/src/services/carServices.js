@@ -25,13 +25,16 @@ const addNewCar = async (carData) => {
   }
 };
 
-const getAllCars = async (page = 1) => {
+const getAllCars = async (page = 1, type) => {
   const limit = 30;
   const db = await connectToDatabase();
   const carCol = db.collection("cars");
   const dealerCol = db.collection("dealers");
+  const deletedCol = db.collection("deletedCars");
 
   const skip = (page - 1) * limit;
+  let cars;
+  let totalCars;
 
   const projection = {
     _id: 0,
@@ -40,16 +43,28 @@ const getAllCars = async (page = 1) => {
     "lang.en.carBrand": 1,
     "lang.en.carModel": 1,
     dealer: 1,
+    isRecommended: 1,
     price_incl_btw: 1,
   };
 
-  const totalCars = await carCol.countDocuments();
-  const cars = await carCol
-    .find({}, { projection })
-    .skip(skip)
-    .limit(limit)
-    .toArray();
-
+  if (type === "available") {
+    totalCars = await carCol.countDocuments();
+    cars = await carCol
+      .find({}, { projection })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .toArray();
+  }
+  if (type === "deleted") {
+    totalCars = await deletedCol.countDocuments();
+    cars = await deletedCol
+      .find({}, { projection })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .toArray();
+  }
   const dealerIds = [...new Set(cars.map((car) => car.dealer).filter(Boolean))];
 
   const dealers = await dealerCol
@@ -70,13 +85,16 @@ const getAllCars = async (page = 1) => {
   return { totalCars, cars: updatedCars };
 };
 
-const getCarById = async (id) => {
+const getCarById = async (carId) => {
   try {
     const db = await connectToDatabase();
     const carCol = db.collection("cars");
     const dealerCol = db.collection("dealers");
 
-    const car = await carCol.findOne({ carId: id }, { projection: { _id: 0 } });
+    const car = await carCol.findOne(
+      { carId: carId },
+      { projection: { _id: 0 } }
+    );
 
     if (car && car.dealer) {
       const dealerInfo = await dealerCol.findOne(
@@ -108,6 +126,7 @@ const deleteCarById = async (carId) => {
     const carCol = db.collection("cars");
     const dealerCol = db.collection("dealers");
     const deletedCol = db.collection("deletedCars");
+    const homeCol = db.collection("homeSections");
 
     await session.withTransaction(async () => {
       const car = await carCol.findOne(
@@ -122,6 +141,18 @@ const deleteCarById = async (carId) => {
       if (!insertToDelete.acknowledged) {
         throw new Error("Failed to add deleted car to trash");
       }
+
+      await homeCol.updateOne(
+        { type: "homeSections" },
+        {
+          $pull: {
+            recommended: carId,
+            trusted: carId,
+            damaged: carId,
+          },
+        },
+        { session }
+      );
 
       if (car.dealer) {
         await dealerCol.updateOne(
@@ -193,4 +224,75 @@ const recommendCarById = async (carId) => {
   }
 };
 
-export { addNewCar, getAllCars, getCarById, deleteCarById, recommendCarById };
+const restoreCar = async (carId) => {
+  const session = client.startSession();
+
+  try {
+    const db = await connectToDatabase();
+    const carCol = db.collection("cars");
+    const dealerCol = db.collection("dealers");
+    const deletedCol = db.collection("deletedCars");
+
+    await session.withTransaction(async () => {
+      const car = await deletedCol.findOne(
+        { carId },
+        { projection: { _id: 0 }, session }
+      );
+      if (!car) {
+        throw new Error("Failed to retrieve car for restoration");
+      }
+
+      const insertToRestore = await carCol.insertOne(car, { session });
+      if (!insertToRestore.acknowledged) {
+        throw new Error("Failed to restore car");
+      }
+
+      if (car.dealer) {
+        await dealerCol.updateOne(
+          { dealerId: car.dealer },
+          { $addToSet: { cars: carId } },
+          { session }
+        );
+      }
+      await deletedCol.deleteOne({ carId }, { session });
+    });
+
+    return { success: true, message: "Car restored successfully." };
+  } catch (err) {
+    console.error("Error restoring car:", err.message);
+    return { success: false, message: err.message };
+  } finally {
+    await session.endSession();
+  }
+};
+
+const permanentDeleteCarById = async (carId) => {
+  if (!carId) {
+    return { success: false, message: "carId is required" };
+  }
+  try {
+    const db = await connectToDatabase();
+    const deletedCol = db.collection("deletedCars");
+
+    const result = await deletedCol.deleteOne({ carId });
+
+    if (result.deletedCount === 0) {
+      return { success: false, message: "Car not found or already deleted" };
+    }
+
+    return { success: true, message: "Car permanently deleted" };
+  } catch (err) {
+    console.error("Error deleting car permanently:", err.message);
+    return { success: false, message: "Internal server error" };
+  }
+};
+
+export {
+  addNewCar,
+  getAllCars,
+  getCarById,
+  deleteCarById,
+  recommendCarById,
+  restoreCar,
+  permanentDeleteCarById,
+};

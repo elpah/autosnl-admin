@@ -1,4 +1,5 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/" }],
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
+  "cleanUrls": true,
   "ignoreCommand": "if [ \"$VERCEL_GIT_BRANCH\" != \"master\" ]; then exit 1; fi"
 }

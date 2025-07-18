@@ -21,6 +21,7 @@ const EditCarPage = () => {
   }, [id, navigate]);
 
   const { data, isLoading, error } = useGetCarById(id as string);
+  
   useEffect(() => {
     if (data) {
       globalContext.setCarData(data);

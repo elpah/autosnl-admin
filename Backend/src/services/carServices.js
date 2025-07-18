@@ -25,6 +25,24 @@ const addNewCar = async (carData) => {
   }
 };
 
+const getTotalCars = async () => {
+  const db = await connectToDatabase();
+  const carCol = db.collection("cars");
+  const dealerCol = db.collection("dealers");
+  const totalCars = await carCol.countDocuments();
+  const totalDealers = await dealerCol.countDocuments();
+
+  const totalUsed = await carCol.countDocuments({
+    "lang.en.carType": { $regex: /^used$/i },
+  });
+
+  const totalDamaged = await carCol.countDocuments({
+    "lang.en.carType": { $regex: /^damaged$/i },
+  });
+
+  return { totalCars, totalDealers, totalUsed, totalDamaged };
+};
+
 const getAllCars = async (page = 1, type) => {
   const limit = 30;
   const db = await connectToDatabase();
@@ -289,6 +307,7 @@ const permanentDeleteCarById = async (carId) => {
 
 export {
   addNewCar,
+  getTotalCars,
   getAllCars,
   getCarById,
   deleteCarById,

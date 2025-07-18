@@ -5,6 +5,7 @@ import { uploadImage } from "../services/cloudinary.js";
 import {
   addNewCar,
   getAllCars,
+  getTotalCars,
   getCarById,
   deleteCarById,
   recommendCarById,
@@ -112,10 +113,22 @@ carRouter.post("/add-car", upload, async (req, res) => {
   }
 });
 
+carRouter.get("/get-total-cars", async (_req, res) => {
+  try {
+    const { totalCars, totalDealers, totalDamaged, totalUsed, test } =
+      await getTotalCars();
+
+    res
+      .status(200)
+      .json({ totalCars, totalDealers, totalDamaged, totalUsed, test });
+  } catch (err) {
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 carRouter.get("/get-all-cars", async (req, res) => {
   const page = req.query.pageNumber || 1;
   const type = req.query.type;
-  // console.log(type);
   try {
     const { totalCars, cars } = await getAllCars(page,type);
     res.status(200).json({ totalCars, cars });

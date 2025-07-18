@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext} from "react";
 import { GlobalContext, type ICarData } from "../../context/GlobalContext";
 import styles from "./add-advanced-info.module.css";
 import ImageUploader from "../image-uploader/ImageUploader";

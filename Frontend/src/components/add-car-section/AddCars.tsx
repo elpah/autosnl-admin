@@ -28,7 +28,7 @@ const AddCars = () => {
     "addCar"
   );
 
-  const { mutate, isPending, isError, isSuccess, error } = useCreateCar();
+  const { mutate, isPending } = useCreateCar();
   // const { data, isLoading } = useBrandModel();
 
   const handleNext = () => {

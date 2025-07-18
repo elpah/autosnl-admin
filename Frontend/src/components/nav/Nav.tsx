@@ -29,6 +29,7 @@ const Nav = () => {
       }
     };
   }, [navIsOpen]);
+  
   return (
     <header>
       <nav>

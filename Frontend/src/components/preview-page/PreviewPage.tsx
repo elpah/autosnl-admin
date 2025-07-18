@@ -30,6 +30,10 @@ const PreviewPage = ({ handleButtonClick }: PreviewPageProps) => {
     { code: "ua", label: "Ukrainian" },
   ];
 
+  if(dealerError){
+    return<div>Error Loading dealers</div>
+  }
+
   if (dealerIsLoading) return <div>Loading...</div>;
   const getDealerInfo = (): IDealer | null | any => {
     const dealer = globalContext.carData.dealer;

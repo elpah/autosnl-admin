@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import {useState } from "react";
 import CarList from "../../components/cars-section/CarList";
 import DashboardLayout from "../../components/dashboard-layout/DashboardLayout";
 import ShowModal from "../../components/show-modal/ShowModal";
@@ -21,12 +21,15 @@ const CarsPage = () => {
   const currentType =
     type === "available" || type === "deleted" ? type : "available";
 
-  const { mutate: deleteCar, isPending, isError, isSuccess } = useDeleteCar();
+  const {
+    mutate: deleteCar,
+    // isPending: useDeleteIsPending,
+    // isError: useDeleteIsError,
+  } = useDeleteCar();
   const {
     mutate: deletePermanently,
-    isPending: permDeleteIsPending,
-    isError: permDeleteIsError,
-    isSuccess: permDeleteIsSuccess,
+    // isPending: permDeleteIsPending,
+    // isError: permDeleteIsError,
   } = usePermanentDeleteCar();
 
   const handleDeleteForever = () => {
@@ -38,14 +41,14 @@ const CarsPage = () => {
         // Show success toast message
         alert("deleted Permanently");
         setCarIdToDelete(null);
-        refetchFn(); 
+        refetchFn();
 
         // toast.success("Car recommended successfully!");
       },
       onError: (error: any) => {
         // Show error toast message if mutation fails
         // toast.error("Error recommending the car!");
-        alert("failed to delete");
+        alert(error.message);
         setCarIdToDelete(null);
       },
     });
@@ -59,14 +62,14 @@ const CarsPage = () => {
         // Show success toast message
         alert("delete success");
         setCarIdToDelete(null);
-        refetchFn(); 
+        refetchFn();
 
         // toast.success("Car recommended successfully!");
       },
       onError: (error: any) => {
         // Show error toast message if mutation fails
         // toast.error("Error recommending the car!");
-        alert("failed to delete");
+        alert(error.message);
         setCarIdToDelete(null);
       },
     });

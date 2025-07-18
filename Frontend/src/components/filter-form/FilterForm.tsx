@@ -2,8 +2,8 @@ import { useState } from "react";
 import styles from "./filter-form.module.css";
 
 const FilterForm = () => {
-  const [sortBy, setSortBy] = useState("");
-  const [filterBy, setFilterBy] = useState("");
+  const [_sortBy, setSortBy] = useState("");
+  const [_filterBy, setFilterBy] = useState("");
   return (
     <div className={styles.container}>
       <div className={styles.search_div}>

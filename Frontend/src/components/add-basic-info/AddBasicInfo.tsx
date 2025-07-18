@@ -125,7 +125,6 @@ const AddBasicInfo = ({
     }));
   };
 
-
   const updateTranslationFieldFunctionOthers = (
     field: keyof CarTranslationFields,
     value: string
@@ -142,48 +141,6 @@ const AddBasicInfo = ({
     }));
   };
 
-  const updateTranslationOthers = (
-    field: keyof CarTranslationFields,
-    value: any
-  ) => {
-    if (value === "other") {
-      updateOther(field, value);
-
-      updateTranslationFieldFunctionOthers(field, value);
-      return;
-    }
-    // updateOther(field, "");
-    // updateTranslationFieldFunctionOthers(field, value);
-  };
-
-  const updateTranslationField = (
-    field: keyof CarTranslationFields,
-    valueEn: any,
-    valueNl: any,
-    valueRu: any,
-    valueUa: any
-  ) => {
-    if (valueEn === "other") {
-      updateOther(field, valueEn);
-      updateTranslationFieldFunctionBrandModel(
-        field,
-        valueEn,
-        valueNl,
-        valueRu,
-        valueUa
-      );
-      return;
-    }
-    updateOther(field, "");
-    updateTranslationFieldFunctionBrandModel(
-      field,
-      valueEn,
-      valueNl,
-      valueRu,
-      valueUa
-    );
-  };
-
   if (isLoading) return <div>isLoading</div>;
 
   return (
@@ -194,8 +151,7 @@ const AddBasicInfo = ({
           name="category"
           id="category"
           value={
-            globalContext.carData.lang[globalContext.currentLanguage]
-              .carType
+            globalContext.carData.lang[globalContext.currentLanguage].carType
           }
           onChange={(e) => {
             const selectedCat = Object.keys(category).find((key) => {
@@ -623,7 +579,8 @@ const AddBasicInfo = ({
           onChange={(e) => {
             const selectedVanish = Object.keys(vanishData).find((key) => {
               return (
-                vanishData[key][globalContext.currentLanguage] === e.target.value
+                vanishData[key][globalContext.currentLanguage] ===
+                e.target.value
               );
             });
 
@@ -643,7 +600,8 @@ const AddBasicInfo = ({
           <option disabled>Select Vanish</option>
 
           {Object.keys(vanishData).map((vanishKey, index) => {
-            const vanishName = vanishData[vanishKey][globalContext.currentLanguage];
+            const vanishName =
+              vanishData[vanishKey][globalContext.currentLanguage];
             return (
               <option key={index} value={vanishName}>
                 {vanishName}

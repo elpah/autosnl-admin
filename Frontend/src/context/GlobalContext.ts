@@ -113,7 +113,7 @@ export const initialCarData: ICarData = {
 };
 
 export type ICarData = {
-  carId?;
+  carId?:string;
   lang: {
     en: CarTranslationFields;
     nl: CarTranslationFields;

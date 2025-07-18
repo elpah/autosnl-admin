@@ -3,13 +3,12 @@ import { useContext, useEffect } from "react";
 import {
   GlobalContext,
   IDealer,
-  type ICarData,
 } from "../../context/GlobalContext";
 
 import styles from "./add-dealer-form.module.css";
 const AddDealerForm = () => {
   const globalContext = useContext(GlobalContext);
-  const { data: dealerData, isLoading: dealerIsLoading, error } = useDealers();
+  const { data: dealerData, isLoading: dealerIsLoading } = useDealers();
 
   useEffect(
     () => console.table(globalContext.carData),

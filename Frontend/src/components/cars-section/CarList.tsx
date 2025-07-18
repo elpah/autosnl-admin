@@ -29,22 +29,24 @@ const CarList = ({
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
 
-  const { mutate, isPending, isError, isSuccess } = useAddRecommend();
+  const {
+    mutate,
+    //  isPending, isError,
+  } = useAddRecommend();
   const {
     mutate: restoreCar,
     isPending: restoreIsPending,
     isError: restoreIsError,
-    isSuccess: restoreIsSuccess,
   } = useRestoreCar();
 
   const {
     data: carData,
-    isLoading,
-    error,
+    isLoading: carDataIsLoading,
+    isError: carDataIsError,
     refetch,
   } = useGetAllCars(currentPage, currentType);
 
-  let totalPages;
+  // let totalPages :number = 1;
   const handlePrevClick = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
@@ -86,7 +88,7 @@ const CarList = ({
       onError: (error: any) => {
         // Show error toast message if mutation fails
         // toast.error("Error recommending the car!");
-        alert("failed to restore Car");
+        alert(error.message);
         setCarIdToDelete(null);
       },
     });
@@ -107,28 +109,28 @@ const CarList = ({
       onError: (error: any) => {
         // Show error toast message if mutation fails
         // toast.error("Error recommending the car!");
-        alert("failed");
+        alert(error.message);
       },
     });
   };
+  const totalPages = carData ? Math.ceil(carData.totalCars / 30) : 1;
+
+  const getPageNumbers = (totalPages: number): number[] => {
+    return Array.from({ length: totalPages }, (_, i) => i + 1);
+  };
 
   useEffect(() => {
-    setRefetchFn(() => refetch);
-  }, [refetch]);
+    setRefetchFn(refetch);
+  }, [refetch, setRefetchFn]);
 
   useEffect(() => {
     refetch();
   }, [currentType]);
 
-  if (isLoading) return <div>is loading...</div>;
-
-  if (carData) {
-    totalPages = carData.totalCars / 30;
-  }
-  const getPageNumbers = (totalPages: number): number[] => {
-    return Array.from({ length: totalPages }, (_, i) => i + 1);
-  };
-
+  if (carDataIsLoading) return <div>is Loading...</div>;
+  if (restoreIsPending) return <div>is Loading...</div>;
+  if (carDataIsError) return <div>Error loading cars</div>;
+  if (restoreIsError) return <div>Error restoring cars</div>;
   return (
     <div className={styles.container}>
       <CarButton
@@ -161,7 +163,8 @@ const CarList = ({
         <TableHeader />
         {carData?.cars.map((car) => (
           <CarCard
-            carId={car.carId}
+            key={car.carId!}
+            carId={car.carId!}
             brand={car.lang.en.carBrand}
             model={car.lang.en.carModel}
             price={car.price_incl_btw.toString()}
@@ -170,11 +173,11 @@ const CarList = ({
             recommendText={
               car.isRecommended === true ? "Unrecommended" : "Recommended"
             }
-            handleEditClick={() => handleEditClick(car.carId)}
-            handleDeleteClick={() => openSoftDeleteModal(car.carId)}
-            handleRecommendClick={() => handleRecommendClick(car.carId)}
-            handleDeleteForever={() => openHardDeleteModal(car.carId)}
-            handleRestore={() => handleRestore(car.carId)}
+            handleEditClick={() => handleEditClick(car.carId!)}
+            handleDeleteClick={() => openSoftDeleteModal(car.carId!)}
+            handleRecommendClick={() => handleRecommendClick(car.carId!)}
+            handleDeleteForever={() => openHardDeleteModal(car.carId!)}
+            handleRestore={() => handleRestore(car.carId!)}
             deletedButtons={currentType === "deleted"}
             availableButtons={currentType === "available"}
           />

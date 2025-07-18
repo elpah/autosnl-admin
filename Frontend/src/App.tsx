@@ -24,6 +24,7 @@ import ShowModal from "./components/show-modal/ShowModal";
 
 function App() {
   const navigate = useNavigate();
+
   const [currentLanguage, setCurrentLanguage] = useState<
     "en" | "ru" | "nl" | "ua"
   >("en");

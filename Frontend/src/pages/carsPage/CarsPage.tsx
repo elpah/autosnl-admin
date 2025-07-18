@@ -1,4 +1,4 @@
-import {useState } from "react";
+import {useRef, useState } from "react";
 import CarList from "../../components/cars-section/CarList";
 import DashboardLayout from "../../components/dashboard-layout/DashboardLayout";
 import ShowModal from "../../components/show-modal/ShowModal";
@@ -12,7 +12,7 @@ const CarsPage = () => {
   const [modalMode, setModalMode] = useState<"softDelete" | "hardDelete">(
     "softDelete"
   );
-  const [refetchFn, setRefetchFn] = useState<() => void>(() => () => {});
+  const refetchFnRef = useRef<() => void>(() => {});
 
   const text = `Are you sure you want to delete car ${
     modalMode === "hardDelete" ? "Permanently" : ""
@@ -41,8 +41,7 @@ const CarsPage = () => {
         // Show success toast message
         alert("deleted Permanently");
         setCarIdToDelete(null);
-        refetchFn();
-
+        refetchFnRef.current?.();
         // toast.success("Car recommended successfully!");
       },
       onError: (error: any) => {
@@ -62,8 +61,7 @@ const CarsPage = () => {
         // Show success toast message
         alert("delete success");
         setCarIdToDelete(null);
-        refetchFn();
-
+        refetchFnRef.current?.();
         // toast.success("Car recommended successfully!");
       },
       onError: (error: any) => {
@@ -94,8 +92,9 @@ const CarsPage = () => {
       )}
       <DashboardLayout>
         <CarList
-          setRefetchFn={setRefetchFn}
-          setShowModal={setShowModal}
+ setRefetchFn={(fn) => {
+  refetchFnRef.current = fn;
+}}          setShowModal={setShowModal}
           setModalMode={setModalMode}
           setCarIdToDelete={setCarIdToDelete}
           currentType={currentType}

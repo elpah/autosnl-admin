@@ -8,23 +8,29 @@ import {
 
 import styles from "./dashboard-page.module.css";
 import DashboardLayout from "../../components/dashboard-layout/DashboardLayout";
+import useGetTotals from "../../hooks/useGetTotal";
 
 const DashboardPage = () => {
+
+  const {data, isLoading, error} = useGetTotals();
+
+  if(isLoading) return <div> is Loading</div>
+
   const totalCards = [
-    { image: total_cars, header: 5000, total_text: "Total number of cars" },
+    { image: total_cars, header: data?.totalCars  || 0, total_text: "Total number of cars" },
     {
       image: total_used,
-      header: 3000,
+      header: data?.totalUsed || 0,
       total_text: "Total number of used Cars",
     },
     {
       image: total_damaged,
-      header: 3000,
+      header: data?.totalDamaged  || 0,
       total_text: "Total number of damaged Cars",
     },
     {
       image: total_dealers,
-      header: 3000,
+      header: data?.totalDealers || 0,
       total_text: "Total Number of dealers",
     },
   ];

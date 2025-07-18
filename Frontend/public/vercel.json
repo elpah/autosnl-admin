@@ -1,3 +1,4 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/" }]
+  "rewrites": [{ "source": "/(.*)", "destination": "/" }],
+  "ignoreCommand": "if [ \"$VERCEL_GIT_BRANCH\" != \"master\" ]; then exit 1; fi"
 }

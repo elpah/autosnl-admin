@@ -1,6 +1,6 @@
 const NotFound = () => {
   return (
-	<div>Car Not Found!!</div>
+	<div>Page Not Found!!</div>
   )
 }
 

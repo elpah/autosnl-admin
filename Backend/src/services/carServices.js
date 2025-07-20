@@ -43,14 +43,23 @@ const getTotalCars = async () => {
   return { totalCars, totalDealers, totalUsed, totalDamaged };
 };
 
-const getAllCars = async (page = 1, type) => {
+const getAllCars = async (params) => {
   const limit = 30;
   const db = await connectToDatabase();
   const carCol = db.collection("cars");
   const dealerCol = db.collection("dealers");
   const deletedCol = db.collection("deletedCars");
 
-  const skip = (page - 1) * limit;
+  const {
+    pageNumber = 1,
+    type,
+    sortOptions = {},
+    carBrand,
+    carModel,
+    carCategory,
+  } = params;
+
+  const skip = (pageNumber - 1) * limit;
   let cars;
   let totalCars;
 
@@ -63,44 +72,66 @@ const getAllCars = async (page = 1, type) => {
     dealer: 1,
     isRecommended: 1,
     price_incl_btw: 1,
+    "lang.en.carType": 1,
+    createdAt: 1,
   };
 
-  if (type === "available") {
-    totalCars = await carCol.countDocuments();
-    cars = await carCol
-      .find({}, { projection })
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit)
-      .toArray();
+  let query = {};
+  if (carBrand) {
+    query["lang.en.carBrand"] = { $regex: new RegExp(`^${carBrand}$`, "i") };
   }
-  if (type === "deleted") {
-    totalCars = await deletedCol.countDocuments();
-    cars = await deletedCol
-      .find({}, { projection })
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit)
-      .toArray();
+  if (carModel) {
+    query["lang.en.carModel"] = { $regex: new RegExp(`^${carModel}$`, "i") };
   }
-  const dealerIds = [...new Set(cars.map((car) => car.dealer).filter(Boolean))];
+  if (carCategory) {
+    query["lang.en.carType"] = { $regex: new RegExp(`^${carCategory}$`, "i") };
+  }
+  const defaultSort = { createdAt: -1 };
 
-  const dealers = await dealerCol
-    .find({ dealerId: { $in: dealerIds } })
-    .project({ dealerId: 1, dealerName: 1 })
-    .toArray();
+  try {
+    if (type === "available") {
+      totalCars = await carCol.countDocuments(query);
+      cars = await carCol
+        .find(query, { projection })
+        .sort(sortOptions)
 
-  const dealerMap = Object.fromEntries(
-    dealers.map((dealer) => [dealer.dealerId, dealer.dealerName])
-  );
+        .skip(skip)
+        .limit(limit)
+        .toArray();
+    } else if (type === "deleted") {
+      totalCars = await deletedCol.countDocuments(query);
+      cars = await deletedCol
+        .find(query, { projection })
+        .sort(sortOptions)
+        .skip(skip)
+        .limit(limit)
+        .toArray();
+    }
 
-  const updatedCars = cars.map((car) => ({
-    ...car,
-    carImages: [car.carImages[0]],
-    dealer: dealerMap[car.dealer] || null,
-  }));
 
-  return { totalCars, cars: updatedCars };
+    const dealerIds = [
+      ...new Set(cars.map((car) => car.dealer).filter(Boolean)),
+    ];
+    const dealers = await dealerCol
+      .find({ dealerId: { $in: dealerIds } })
+      .project({ dealerId: 1, dealerName: 1 })
+      .toArray();
+
+    const dealerMap = Object.fromEntries(
+      dealers.map((dealer) => [dealer.dealerId, dealer.dealerName])
+    );
+
+    const updatedCars = cars.map((car) => ({
+      ...car,
+      carImages: [car.carImages[0]],
+      dealer: dealerMap[car.dealer] || null, 
+    }));
+
+    return { totalCars, cars:updatedCars };
+  } catch (error) {
+    console.error("Error in getAllCars function:", error);
+    throw new Error("Failed to fetch cars. Please try again later.");
+  }
 };
 
 const getCarById = async (carId) => {

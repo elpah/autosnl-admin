@@ -10,7 +10,7 @@ import {
   deleteCarById,
   recommendCarById,
   permanentDeleteCarById,
-  restoreCar
+  restoreCar,
 } from "../services/carServices.js";
 import { getBrandModelsCountries } from "../services/brandModelCountryServices.js";
 import {
@@ -127,12 +127,38 @@ carRouter.get("/get-total-cars", async (_req, res) => {
 });
 
 carRouter.get("/get-all-cars", async (req, res) => {
-  const page = req.query.pageNumber || 1;
-  const type = req.query.type;
   try {
-    const { totalCars, cars } = await getAllCars(page,type);
+    let {
+      pageNumber = 1,
+      type = "available",
+      sortBy = "",
+      brand = "",
+      model = "",
+      category = "",
+    } = req.query;
+
+    let sortOptions = {};
+    if (sortBy === "price_asc") {
+      sortOptions = { price_incl_btw: 1 };
+    } else if (sortBy === "price_desc") {
+      sortOptions = { price_incl_btw: -1 };
+    } else {
+      sortOptions = { createdAt: -1 };
+    }
+
+    let newObject = {
+      pageNumber: pageNumber || 1,
+      type: type || "available",
+      sortOptions: sortOptions,
+      carBrand: brand || "",
+      carModel: model || "",
+      carCategory: category === "all" ? "" : category,
+    };
+    const { totalCars, cars } = await getAllCars(newObject);
+
     res.status(200).json({ totalCars, cars });
   } catch (err) {
+    console.error(err);
     res.status(500).send("Internal Server Error");
   }
 });
@@ -167,7 +193,6 @@ carRouter.patch("/restore-car/:carId", async (req, res) => {
   }
 });
 
-
 carRouter.delete("/permanent-delete-car/:carId", async (req, res) => {
   const { carId } = req.params;
   try {
@@ -175,14 +200,13 @@ carRouter.delete("/permanent-delete-car/:carId", async (req, res) => {
     if (result.success) {
       res.status(200).json({ message: "Car deleted successfully" });
     } else {
-  res.status(400).json({ message: result.message });
+      res.status(400).json({ message: result.message });
     }
   } catch (err) {
     console.error("Error deleting car:", err);
     res.status(500).send("Internal Server Error");
   }
 });
-
 
 carRouter.patch("/recommend-car", async (req, res) => {
   const carId = req.query.carId;

@@ -6,7 +6,7 @@ const useBrandModel = () => {
   const fetchCategories = () =>
     axios
       .get<ICarCategoriesResponse>(
-        `${import.meta.env.VITE_API_URL}brandmodelscountries`
+        `${import.meta.env.VITE_API_URL}adminbrandmodelscountries`
       )
       .then((res) => res.data);
   return useQuery<ICarCategoriesResponse, Error>({

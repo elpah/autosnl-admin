@@ -1,7 +1,8 @@
 import "dotenv/config.js";
 import Router from "express";
 import multer from "multer";
-import { uploadImage } from "../services/cloudinary.js";
+import { uploadImage } from "../services/admin-services/cloudinary.js";
+import { getBrandModelsCountries } from "../services/admin-services/brandModelCountryServices.js";
 import {
   addNewCar,
   getAllCars,
@@ -11,17 +12,17 @@ import {
   recommendCarById,
   permanentDeleteCarById,
   restoreCar,
-} from "../services/carServices.js";
-import { getBrandModelsCountries } from "../services/brandModelCountryServices.js";
+} from "../services/admin-services/carServices.js";
 import {
   getDealers,
   addNewDealer,
   addCarIdToDealer,
-} from "../services/dealerServices.js";
+} from "../services/admin-services/dealerServices.js";
 
-const carRouter = Router();
+const adminRouter = Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage }).array("carImages[]");
+
 
 const fetchRes = async (res, fetchFunction) => {
   try {
@@ -32,20 +33,11 @@ const fetchRes = async (res, fetchFunction) => {
   }
 };
 
-carRouter.get("/", async (_req, res) => {
-  try {
-    res.status(200).send("Successfully reached endpoint!!!");
-  } catch (err) {
-    console.error("Error creating car:", err);
-    res.status(500).send(err.message);
-  }
-});
-
-carRouter.get("/brandmodelscountries", (_req, res) =>
+adminRouter.get("/adminbrandmodelscountries", (_req, res) =>
   fetchRes(res, getBrandModelsCountries)
 );
 
-carRouter.get("/get-car-by-id/:carId", async (req, res) => {
+adminRouter.get("/get-car-by-id/:carId", async (req, res) => {
   try {
     const { carId } = req.params;
     if (!carId) {
@@ -64,9 +56,11 @@ carRouter.get("/get-car-by-id/:carId", async (req, res) => {
   }
 });
 
-carRouter.put("/update-car", async (req, res) => {});
+adminRouter.put("/update-car", async (req, res) => {});
 
-carRouter.post("/add-car", upload, async (req, res) => {
+
+
+adminRouter.post("/add-car", upload, async (req, res) => {
   try {
     const carData = JSON.parse(req.body.carData);
     const carImages = req.files;
@@ -113,7 +107,8 @@ carRouter.post("/add-car", upload, async (req, res) => {
   }
 });
 
-carRouter.get("/get-total-cars", async (_req, res) => {
+
+adminRouter.get("/get-total-cars", async (_req, res) => {
   try {
     const { totalCars, totalDealers, totalDamaged, totalUsed, test } =
       await getTotalCars();
@@ -126,7 +121,9 @@ carRouter.get("/get-total-cars", async (_req, res) => {
   }
 });
 
-carRouter.get("/get-all-cars", async (req, res) => {
+
+
+adminRouter.get("/admin-get-all-cars", async (req, res) => {
   try {
     let {
       pageNumber = 1,
@@ -163,7 +160,8 @@ carRouter.get("/get-all-cars", async (req, res) => {
   }
 });
 
-carRouter.delete("/delete-car/:carId", async (req, res) => {
+
+adminRouter.delete("/delete-car/:carId", async (req, res) => {
   const { carId } = req.params;
   try {
     const result = await deleteCarById(carId);
@@ -178,7 +176,8 @@ carRouter.delete("/delete-car/:carId", async (req, res) => {
   }
 });
 
-carRouter.patch("/restore-car/:carId", async (req, res) => {
+
+adminRouter.patch("/restore-car/:carId", async (req, res) => {
   const { carId } = req.params;
   try {
     const result = await restoreCar(carId);
@@ -193,7 +192,7 @@ carRouter.patch("/restore-car/:carId", async (req, res) => {
   }
 });
 
-carRouter.delete("/permanent-delete-car/:carId", async (req, res) => {
+adminRouter.delete("/permanent-delete-car/:carId", async (req, res) => {
   const { carId } = req.params;
   try {
     const result = await permanentDeleteCarById(carId);
@@ -208,7 +207,7 @@ carRouter.delete("/permanent-delete-car/:carId", async (req, res) => {
   }
 });
 
-carRouter.patch("/recommend-car", async (req, res) => {
+adminRouter.patch("/recommend-car", async (req, res) => {
   const carId = req.query.carId;
   try {
     const result = await recommendCarById(carId);
@@ -223,6 +222,7 @@ carRouter.patch("/recommend-car", async (req, res) => {
   }
 });
 
-carRouter.get("/dealers", (_req, res) => fetchRes(res, getDealers));
+adminRouter.get("/dealers", (_req, res) => fetchRes(res, getDealers));
 
-export default carRouter;
+
+export default adminRouter;

@@ -1,6 +1,6 @@
-import client from "../config/client.js";
+import client from "../../config/client.js";
 
-import { connectToDatabase } from "../config/db.js";
+import { connectToDatabase } from "../../config/db.js";
 import { randomUUID } from "crypto";
 
 const addNewCar = async (carData) => {

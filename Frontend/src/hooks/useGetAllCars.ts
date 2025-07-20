@@ -19,7 +19,7 @@ const useGetAllCars = (
 ) => {
   const fetchCars = useCallback(() => {
     return axios
-      .get<ICarResponse>(`${import.meta.env.VITE_API_URL}get-all-cars`, {
+      .get<ICarResponse>(`${import.meta.env.VITE_API_URL}admin-get-all-cars`, {
         params: { ...params, type },
       })
       .then((res) => res.data);

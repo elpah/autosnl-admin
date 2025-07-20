@@ -1,4 +1,4 @@
-import { connectToDatabase } from "../config/db.js";
+import { connectToDatabase } from "../../config/db.js";
 import { randomUUID } from "crypto";
 
 const getDealers = async () => {

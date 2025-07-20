@@ -12,6 +12,7 @@ import AddBasicInfo from "../add-basic-info/AddBasicInfo";
 import {
   GlobalContext,
   ICarData,
+  initialCarData,
   type Lang,
 } from "../../context/GlobalContext";
 import LanguageSelector from "../language-selector/LanguageSelector";
@@ -19,14 +20,24 @@ import ButtonContainer from "../button-container/ButtonContainer";
 import useCreateCar from "../../hooks/useCreateCar";
 import { handleScrollToTop } from "../../utils/utilFunctions";
 import CarPage from "../preview-page/PreviewPage";
-import styles from "./add-car.module.css";
 import CarButton from "../car-button/CarButton";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import styles from "./add-car.module.css";
 
 const AddCars = () => {
   const globalContext = useContext(GlobalContext);
   const [carPagePreview, setCarPagePreview] = useState<"preview" | "addCar">(
     "addCar"
   );
+
+  const notifySuccess = (message: string) => {
+    toast.success(message, {});
+  };
+
+  const notifyError = (message: string) => {
+    toast.error(message, {});
+  };
 
   const { mutate, isPending } = useCreateCar();
   // const { data, isLoading } = useBrandModel();
@@ -108,10 +119,12 @@ const AddCars = () => {
       else {
         mutate(globalContext.carData, {
           onSuccess: () => {
-            alert("Car successfully added!");
+            notifySuccess("Car Successfully Added");
+            globalContext.setCarData(initialCarData);
+            globalContext.setCurrentSelection("Basic");
           },
           onError: (err) => {
-            alert("Something went wrong while submitting.");
+            notifyError("Something went wrong while submitting.");
             console.error(err);
           },
         });
@@ -207,14 +220,15 @@ const AddCars = () => {
 
   return (
     <div className={styles.container}>
-      {carPagePreview === "preview" && <CarPage  handleButtonClick={()=> setCarPagePreview("addCar")
-}/>}
+      {carPagePreview === "preview" && (
+        <CarPage handleButtonClick={() => setCarPagePreview("addCar")} />
+      )}
 
       {carPagePreview === "addCar" && (
         <div className={styles.wrapper}>
           <div className={styles.button_container}>
             <CarButton
-            buttonText={"Preview"}
+              buttonText={"Preview"}
               handleButtonClick={() => {
                 setCarPagePreview("preview");
               }}
@@ -266,12 +280,24 @@ const AddCars = () => {
               )}
               {globalContext.currentSelection === "Dealer" && <AddDealerForm />}
               <ButtonContainer
+                disabled={isPending}
                 handleNextClick={handleNext}
                 handlePreviousClick={handlePrev}
               />
             </AddCarForm>
-
-            {isPending ? "Submitting form" : "sucess .. handle properly later"}
+            <ToastContainer
+              position="bottom-right"
+              autoClose={1500}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable={false}
+              theme="colored"
+              toastStyle={{
+                fontSize: "14px",
+              }}
+            />
           </section>
         </div>
       )}

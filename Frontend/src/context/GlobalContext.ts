@@ -16,6 +16,22 @@ export type CarDamage = {
   text: string;
 };
 
+export type GetCarsParams = {
+  pageNumber: number;
+  brand: string;
+  model: string;
+  category: string;
+  sortBy:"price_asc" | "price_desc" | "none";
+};
+
+export const initialGetCarsParams: GetCarsParams = {
+  brand: "",
+  model: "",
+  category: "",
+  pageNumber: 1,
+  sortBy:"none"
+};
+
 export type IOther = {
   carBrand: string;
   carModel: string;
@@ -113,7 +129,7 @@ export const initialCarData: ICarData = {
 };
 
 export type ICarData = {
-  carId?:string;
+  carId?: string;
   lang: {
     en: CarTranslationFields;
     nl: CarTranslationFields;
@@ -167,6 +183,8 @@ export interface IGlobalContext {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
   pendingLink: string | null;
   setPendingLink: React.Dispatch<React.SetStateAction<string | null>>;
+  getCarsParams: GetCarsParams;
+  setGetCarsParams: React.Dispatch<React.SetStateAction<GetCarsParams>>;
 }
 
 export const GlobalContext = createContext<IGlobalContext>({
@@ -188,4 +206,6 @@ export const GlobalContext = createContext<IGlobalContext>({
   setShowModal: () => {},
   pendingLink: null,
   setPendingLink: () => {},
+  getCarsParams: initialGetCarsParams,
+  setGetCarsParams: () => {},
 });

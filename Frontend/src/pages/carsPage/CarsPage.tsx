@@ -1,10 +1,12 @@
-import {useState } from "react";
+import { useRef, useState } from "react";
 import CarList from "../../components/cars-section/CarList";
 import DashboardLayout from "../../components/dashboard-layout/DashboardLayout";
 import ShowModal from "../../components/show-modal/ShowModal";
 import useDeleteCar from "../../hooks/useDeleteCar";
 import { useParams } from "react-router-dom";
 import usePermanentDeleteCar from "../../hooks/useDeletePermanentDelete";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CarsPage = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -12,7 +14,7 @@ const CarsPage = () => {
   const [modalMode, setModalMode] = useState<"softDelete" | "hardDelete">(
     "softDelete"
   );
-  const [refetchFn, setRefetchFn] = useState<() => void>(() => () => {});
+  const refetchFnRef = useRef<() => void>(() => {});
 
   const text = `Are you sure you want to delete car ${
     modalMode === "hardDelete" ? "Permanently" : ""
@@ -21,16 +23,16 @@ const CarsPage = () => {
   const currentType =
     type === "available" || type === "deleted" ? type : "available";
 
-  const {
-    mutate: deleteCar,
-    // isPending: useDeleteIsPending,
-    // isError: useDeleteIsError,
-  } = useDeleteCar();
-  const {
-    mutate: deletePermanently,
-    // isPending: permDeleteIsPending,
-    // isError: permDeleteIsError,
-  } = usePermanentDeleteCar();
+  const notifySuccess = () => {
+    toast.success("Car Deleted Successfully.", {});
+  };
+
+  const notifyError = (message: string) => {
+    toast.error(message, {});
+  };
+
+  const { mutate: deleteCar } = useDeleteCar();
+  const { mutate: deletePermanently } = usePermanentDeleteCar();
 
   const handleDeleteForever = () => {
     setShowModal(false);
@@ -38,17 +40,12 @@ const CarsPage = () => {
 
     deletePermanently(cardIdToDelete, {
       onSuccess: () => {
-        // Show success toast message
-        alert("deleted Permanently");
+        notifySuccess();
         setCarIdToDelete(null);
-        refetchFn();
-
-        // toast.success("Car recommended successfully!");
+        refetchFnRef.current?.();
       },
       onError: (error: any) => {
-        // Show error toast message if mutation fails
-        // toast.error("Error recommending the car!");
-        alert(error.message);
+        notifyError(error.message);
         setCarIdToDelete(null);
       },
     });
@@ -59,17 +56,12 @@ const CarsPage = () => {
 
     deleteCar(cardIdToDelete!, {
       onSuccess: () => {
-        // Show success toast message
-        alert("delete success");
+        notifySuccess();
         setCarIdToDelete(null);
-        refetchFn();
-
-        // toast.success("Car recommended successfully!");
+        refetchFnRef.current?.();
       },
       onError: (error: any) => {
-        // Show error toast message if mutation fails
-        // toast.error("Error recommending the car!");
-        alert(error.message);
+        notifyError(error.message);
         setCarIdToDelete(null);
       },
     });
@@ -94,7 +86,9 @@ const CarsPage = () => {
       )}
       <DashboardLayout>
         <CarList
-          setRefetchFn={setRefetchFn}
+          setRefetchFn={(fn) => {
+            refetchFnRef.current = fn;
+          }}
           setShowModal={setShowModal}
           setModalMode={setModalMode}
           setCarIdToDelete={setCarIdToDelete}

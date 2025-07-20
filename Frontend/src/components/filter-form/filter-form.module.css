@@ -26,6 +26,9 @@
         border: 1.5px solid var(--primary-color);
         outline: none;
       }
+      &::-webkit-calendar-picker-indicator {
+        display: none !important;
+      }
     }
   }
   .sort_div {

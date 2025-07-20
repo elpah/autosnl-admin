@@ -1,26 +1,28 @@
 import "dotenv/config.js";
 import Router from "express";
 import multer from "multer";
-import { uploadImage } from "../services/cloudinary.js";
+import { uploadImage } from "../services/admin-services/cloudinary.js";
+import { getBrandModelsCountries } from "../services/admin-services/brandModelCountryServices.js";
 import {
   addNewCar,
   getAllCars,
+  getTotalCars,
   getCarById,
   deleteCarById,
   recommendCarById,
   permanentDeleteCarById,
-  restoreCar
-} from "../services/carServices.js";
-import { getBrandModelsCountries } from "../services/brandModelCountryServices.js";
+  restoreCar,
+} from "../services/admin-services/carServices.js";
 import {
   getDealers,
   addNewDealer,
   addCarIdToDealer,
-} from "../services/dealerServices.js";
+} from "../services/admin-services/dealerServices.js";
 
-const carRouter = Router();
+const adminRouter = Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage }).array("carImages[]");
+
 
 const fetchRes = async (res, fetchFunction) => {
   try {
@@ -31,20 +33,11 @@ const fetchRes = async (res, fetchFunction) => {
   }
 };
 
-carRouter.get("/", async (_req, res) => {
-  try {
-    res.status(200).send("Successfully reached endpoint!!!");
-  } catch (err) {
-    console.error("Error creating car:", err);
-    res.status(500).send(err.message);
-  }
-});
-
-carRouter.get("/brandmodelscountries", (_req, res) =>
+adminRouter.get("/adminbrandmodelscountries", (_req, res) =>
   fetchRes(res, getBrandModelsCountries)
 );
 
-carRouter.get("/get-car-by-id/:carId", async (req, res) => {
+adminRouter.get("/get-car-by-id/:carId", async (req, res) => {
   try {
     const { carId } = req.params;
     if (!carId) {
@@ -63,9 +56,11 @@ carRouter.get("/get-car-by-id/:carId", async (req, res) => {
   }
 });
 
-carRouter.put("/update-car", async (req, res) => {});
+adminRouter.put("/update-car", async (req, res) => {});
 
-carRouter.post("/add-car", upload, async (req, res) => {
+
+
+adminRouter.post("/add-car", upload, async (req, res) => {
   try {
     const carData = JSON.parse(req.body.carData);
     const carImages = req.files;
@@ -112,19 +107,61 @@ carRouter.post("/add-car", upload, async (req, res) => {
   }
 });
 
-carRouter.get("/get-all-cars", async (req, res) => {
-  const page = req.query.pageNumber || 1;
-  const type = req.query.type;
-  // console.log(type);
+
+adminRouter.get("/get-total-cars", async (_req, res) => {
   try {
-    const { totalCars, cars } = await getAllCars(page,type);
-    res.status(200).json({ totalCars, cars });
+    const { totalCars, totalDealers, totalDamaged, totalUsed, test } =
+      await getTotalCars();
+
+    res
+      .status(200)
+      .json({ totalCars, totalDealers, totalDamaged, totalUsed, test });
   } catch (err) {
     res.status(500).send("Internal Server Error");
   }
 });
 
-carRouter.delete("/delete-car/:carId", async (req, res) => {
+
+
+adminRouter.get("/admin-get-all-cars", async (req, res) => {
+  try {
+    let {
+      pageNumber = 1,
+      type = "available",
+      sortBy = "",
+      brand = "",
+      model = "",
+      category = "",
+    } = req.query;
+
+    let sortOptions = {};
+    if (sortBy === "price_asc") {
+      sortOptions = { price_incl_btw: 1 };
+    } else if (sortBy === "price_desc") {
+      sortOptions = { price_incl_btw: -1 };
+    } else {
+      sortOptions = { createdAt: -1 };
+    }
+
+    let newObject = {
+      pageNumber: pageNumber || 1,
+      type: type || "available",
+      sortOptions: sortOptions,
+      carBrand: brand || "",
+      carModel: model || "",
+      carCategory: category === "all" ? "" : category,
+    };
+    const { totalCars, cars } = await getAllCars(newObject);
+
+    res.status(200).json({ totalCars, cars });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+
+adminRouter.delete("/delete-car/:carId", async (req, res) => {
   const { carId } = req.params;
   try {
     const result = await deleteCarById(carId);
@@ -139,7 +176,8 @@ carRouter.delete("/delete-car/:carId", async (req, res) => {
   }
 });
 
-carRouter.patch("/restore-car/:carId", async (req, res) => {
+
+adminRouter.patch("/restore-car/:carId", async (req, res) => {
   const { carId } = req.params;
   try {
     const result = await restoreCar(carId);
@@ -154,15 +192,14 @@ carRouter.patch("/restore-car/:carId", async (req, res) => {
   }
 });
 
-
-carRouter.delete("/permanent-delete-car/:carId", async (req, res) => {
+adminRouter.delete("/permanent-delete-car/:carId", async (req, res) => {
   const { carId } = req.params;
   try {
     const result = await permanentDeleteCarById(carId);
     if (result.success) {
       res.status(200).json({ message: "Car deleted successfully" });
     } else {
-  res.status(400).json({ message: result.message });
+      res.status(400).json({ message: result.message });
     }
   } catch (err) {
     console.error("Error deleting car:", err);
@@ -170,8 +207,7 @@ carRouter.delete("/permanent-delete-car/:carId", async (req, res) => {
   }
 });
 
-
-carRouter.patch("/recommend-car", async (req, res) => {
+adminRouter.patch("/recommend-car", async (req, res) => {
   const carId = req.query.carId;
   try {
     const result = await recommendCarById(carId);
@@ -186,6 +222,7 @@ carRouter.patch("/recommend-car", async (req, res) => {
   }
 });
 
-carRouter.get("/dealers", (_req, res) => fetchRes(res, getDealers));
+adminRouter.get("/dealers", (_req, res) => fetchRes(res, getDealers));
 
-export default carRouter;
+
+export default adminRouter;

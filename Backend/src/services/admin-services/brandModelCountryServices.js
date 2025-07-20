@@ -1,4 +1,4 @@
-import { connectToDatabase } from "../config/db.js";
+import { connectToDatabase } from "../../config/db.js";
 
 const getBrandModelsCountries = async () => {
   try {

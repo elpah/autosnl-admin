@@ -11,7 +11,8 @@
     z-index: 10;
     overflow-y: auto;
     background-color: #1d2026;
-    padding-bottom: 25px;
+    /* padding-bottom: 25px; */
+    box-sizing: border-box;
 
     &::-webkit-scrollbar {
       width: 1px;
@@ -113,12 +114,6 @@
   }
 
   @media (min-width: 1200px) {
-    .logo_container {
-      h2 {
-        /* font-size: 30px; */
-      }
-    }
-
     .ul_container {
       ul {
         li {
@@ -149,7 +144,6 @@
     .ul_container {
       ul {
         li {
-     
           font-size: 22px;
           .icon {
             width: 30px;

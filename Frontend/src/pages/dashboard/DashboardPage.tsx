@@ -15,6 +15,7 @@ const DashboardPage = () => {
   const {data, isLoading, error} = useGetTotals();
 
   if(isLoading) return <div> is Loading</div>
+  if (error) return <div>{error?.message}</div>
 
   const totalCards = [
     { image: total_cars, header: data?.totalCars  || 0, total_text: "Total number of cars" },

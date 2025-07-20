@@ -1,7 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useCallback } from "react";
-import { type IDealer, type ICarData } from "../context/GlobalContext";
+import {
+  type IDealer,
+  type ICarData,
+  type GetCarsParams,
+} from "../context/GlobalContext";
 
 type ICarResponse = {
   totalCars: number;
@@ -9,19 +13,22 @@ type ICarResponse = {
   dealer?: IDealer | string;
 };
 
-const useGetAllCars = (pageNumber: number, type: "available" | "deleted") => {
+const useGetAllCars = (
+  params: GetCarsParams,
+  type: "available" | "deleted"
+) => {
   const fetchCars = useCallback(() => {
     return axios
       .get<ICarResponse>(`${import.meta.env.VITE_API_URL}get-all-cars`, {
-        params: { pageNumber, type },
+        params: { ...params, type },
       })
       .then((res) => res.data);
-  }, [pageNumber, type]);
+  }, [params, type]);
 
   return useQuery<ICarResponse, Error>({
-    queryKey: ["cars", pageNumber, type],
+    queryKey: ["cars", params, type],
     queryFn: fetchCars,
-    staleTime: 1000 * 60 * 5,
+    // staleTime: 1000 * 60 * 5,
     // refetchOnWindowFocus: false,
   });
 };

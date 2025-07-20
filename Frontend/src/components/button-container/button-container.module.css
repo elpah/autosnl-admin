@@ -14,6 +14,7 @@
     color: var(--dark-color);
     border: 1px solid #bababa;
     background-color: #fff;
+    margin-bottom: 50px;
   }
   .save {
     color: #fff;
@@ -29,11 +30,6 @@
     button {
       width: 25%;
     }
-    .previous {
-      border: 1px solid var(--gray-color);
-    }
-    /* .save {
-   
-  } */
+  
   }
 }

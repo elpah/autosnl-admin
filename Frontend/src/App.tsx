@@ -14,6 +14,8 @@ import {
   type MenuOption,
   type Lang,
   type currentActionType,
+  type GetCarsParams,
+  initialGetCarsParams,
 } from "./context/GlobalContext";
 
 import "./App.css";
@@ -40,6 +42,8 @@ function App() {
   const [currentAction, setCurrentAction] = useState<currentActionType>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [pendingLink, setPendingLink] = useState<string | null>(null);
+  const [getCarsParams, setGetCarsParams] =
+    useState<GetCarsParams>(initialGetCarsParams);
 
   useEffect(() => {
     if (
@@ -88,6 +92,8 @@ function App() {
           setShowModal,
           pendingLink,
           setPendingLink,
+          getCarsParams,
+          setGetCarsParams,
         }}
       >
         {showModal && (

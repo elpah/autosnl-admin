@@ -20,10 +20,10 @@ interface DealerInfoProps {
 }
 export const DealerInfo = ({ dealer, children }: DealerInfoProps) => {
   const dealer_info = [
-    { value: dealer?.dealerName, icon: `${person_icon}` },
-    { value: dealer?.dealerAddress, icon: `${location_icon}` },
-    { value: dealer?.dealerPhone, icon: `${phone_icon}` },
-    { value: dealer?.dealerEmail, icon: `${email_icon}` },
+    { value: dealer.dealerName, icon: `${person_icon}` },
+    { value: dealer.dealerAddress, icon: `${location_icon}` },
+    { value: dealer.dealerPhone, icon: `${phone_icon}` },
+    { value: dealer.dealerEmail, icon: `${email_icon}` },
   ];
 
   return (

@@ -148,7 +148,7 @@ export type ICarData = {
   carVat: number;
   carNumberOfDoors: string;
   carWeight: string;
-  dealer: IDealer | string;
+  dealer: IDealer;
   isRecommended?: boolean;
 };
 

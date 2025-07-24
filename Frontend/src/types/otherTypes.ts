@@ -42,7 +42,7 @@ type ICarPageProps = {
   carWeight: string;
   damages: { title: string; text: string }[];
   options: CarOptions;
-  dealerInfo: IDealer | string;
+  dealerInfo: IDealer;
 };
 
 export { type ICarPageProps };

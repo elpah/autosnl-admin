@@ -23,7 +23,6 @@ const adminRouter = Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage }).array("carImages[]");
 
-
 const fetchRes = async (res, fetchFunction) => {
   try {
     const cars = await fetchFunction();
@@ -51,14 +50,14 @@ adminRouter.get("/get-car-by-id/:carId", async (req, res) => {
     }
     return res.status(200).json(car);
   } catch (err) {
-    console.error("Error in /get-car-by-id:", err);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Error in /get-car-by-id:", err);
+    }
     return res.status(500).json({ message: "Internal server error" });
   }
 });
 
 adminRouter.put("/update-car", async (req, res) => {});
-
-
 
 adminRouter.post("/add-car", upload, async (req, res) => {
   try {
@@ -68,11 +67,9 @@ adminRouter.post("/add-car", upload, async (req, res) => {
     const uploadedImages = await Promise.all(
       carImages.map(async (file) => {
         const uploaded = await uploadImage(file);
-
         if (!uploaded || !uploaded.url) {
           throw new Error("Image upload failed or did not return a URL");
         }
-
         return {
           url: uploaded.url,
           public_id: uploaded.public_id,
@@ -91,7 +88,6 @@ adminRouter.post("/add-car", upload, async (req, res) => {
       delete newDealerData.dealerId;
       let newDealerId = await addNewDealer(newDealerData);
       if (newDealerId) {
-        console.log(newDealerId);
         carData.dealer = newDealerId;
         let carId = await addNewCar(carData);
         if (carId) {
@@ -102,11 +98,12 @@ adminRouter.post("/add-car", upload, async (req, res) => {
 
     res.status(200).json({ message: "Car added successfully" });
   } catch (error) {
-    console.error(error);
+    if (process.env.NODE_ENV !== "production") {
+      console.error(error);
+    }
     res.status(500).json({ message: "Something went wrong" });
   }
 });
-
 
 adminRouter.get("/get-total-cars", async (_req, res) => {
   try {
@@ -120,8 +117,6 @@ adminRouter.get("/get-total-cars", async (_req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
-
-
 
 adminRouter.get("/admin-get-all-cars", async (req, res) => {
   try {
@@ -155,11 +150,12 @@ adminRouter.get("/admin-get-all-cars", async (req, res) => {
 
     res.status(200).json({ totalCars, cars });
   } catch (err) {
-    console.error(err);
+    if (process.env.NODE_ENV !== "production") {
+      console.error(err);
+    }
     res.status(500).send("Internal Server Error");
   }
 });
-
 
 adminRouter.delete("/delete-car/:carId", async (req, res) => {
   const { carId } = req.params;
@@ -171,11 +167,12 @@ adminRouter.delete("/delete-car/:carId", async (req, res) => {
       res.status(400).json({ message: result.message });
     }
   } catch (err) {
-    console.error("Error deleting car:", err);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Error deleting car:", err);
+    }
     res.status(500).send("Internal Server Error");
   }
 });
-
 
 adminRouter.patch("/restore-car/:carId", async (req, res) => {
   const { carId } = req.params;
@@ -187,7 +184,9 @@ adminRouter.patch("/restore-car/:carId", async (req, res) => {
       res.status(400).json({ message: result.message });
     }
   } catch (err) {
-    console.error("Error restoring car:", err);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Error restoring car:", err);
+    }
     res.status(500).send("Internal Server Error");
   }
 });
@@ -217,12 +216,13 @@ adminRouter.patch("/recommend-car", async (req, res) => {
       res.status(400).json({ message: result.message });
     }
   } catch (err) {
-    console.error("Error recommending car:", err);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Error recommending car:", err);
+    }
     res.status(500).send("Internal Server Error");
   }
 });
 
 adminRouter.get("/dealers", (_req, res) => fetchRes(res, getDealers));
-
 
 export default adminRouter;

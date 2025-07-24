@@ -163,7 +163,9 @@ clientRouter.get("/carByDealerId", async (req, res) => {
     const { totalCars, dealer, cars } = await getCarByDealerId(filters, page);
     res.status(200).json({ totalCars, dealer, cars });
   } catch (err) {
-    console.error("Error fetching cars:", err);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Error fetching cars:", err);
+    }
     res.status(500).send("Internal Server Error");
   }
 });
@@ -177,7 +179,9 @@ const fetchCars = async (res, fetchFunction) => {
   }
 };
 
-clientRouter.get("/home-section", (_req, res) => fetchCars(res, getHomeSections));
+clientRouter.get("/home-section", (_req, res) =>
+  fetchCars(res, getHomeSections)
+);
 clientRouter.get("/brandmodelscountries", (_req, res) =>
   fetchCars(res, getBrandModelsCountries)
 );

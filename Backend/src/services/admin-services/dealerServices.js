@@ -39,7 +39,6 @@ const addNewDealer = async (dealerData) => {
     }
 
     const newDealer = { dealerId: randomUUID(), cars: [], ...dealerData };
-    console.log(newDealer);
     const db = await connectToDatabase();
     const col = db.collection("dealers");
 
@@ -51,14 +50,15 @@ const addNewDealer = async (dealerData) => {
 
     return newDealer.dealerId;
   } catch (err) {
-    console.error("Error in addNewDealer:", err);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Error in addNewDealer:", err);
+    }
     return { success: false, message: err.message };
   }
 };
 
 const addCarIdToDealer = async (carId, dealerId) => {
   if (!carId || !dealerId) {
-    console.log("Missing carId or dealerId");
     return false;
   }
   try {
@@ -78,13 +78,17 @@ const addCarIdToDealer = async (carId, dealerId) => {
     );
 
     if (!updateResult.modifiedCount) {
-      console.warn(
-        "Dealer found, but no update was made (maybe carId already exists?)"
-      );
+      if (process.env.NODE_ENV !== "production") {
+        console.warn(
+          "Dealer found, but no update was made (maybe carId already exists?)"
+        );
+      }
     }
     return updateResult.modifiedCount > 0;
   } catch (err) {
-    console.error("Error in addCarIdToDealer:", err.message);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Error in addCarIdToDealer:", err.message);
+    }
     return false;
   }
 };

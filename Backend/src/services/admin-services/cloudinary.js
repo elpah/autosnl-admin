@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import cloudinary from "cloudinary";
 import { Readable } from "stream";
 
@@ -21,7 +24,9 @@ const streamUpload = (fileBuffer) => {
       },
       (error, result) => {
         if (error) {
-          console.error("Cloudinary error:", error);
+          if (process.env.NODE_ENV !== "production") {
+            console.error("Cloudinary error:", error);
+          }
           reject(error);
         } else {
           resolve(result);

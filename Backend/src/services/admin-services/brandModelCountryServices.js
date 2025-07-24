@@ -130,7 +130,9 @@ const getBrandModelsCountries = async () => {
 
     return formattedResult;
   } catch (error) {
-    console.error("Error retrieving car metadata:", error);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Error retrieving car metadata:", error);
+    }
     return {};
   }
 };

@@ -18,16 +18,6 @@ const AddDealerForm = () => {
       }));
       return;
     }
-    // else if (field === "dealerId" && value !== "other") {
-    //   globalContext.setCarData((prev) => ({
-    //     ...prev,
-    //     dealer: {
-    //       isOther: false,
-    //     },
-    //   }));
-    //   return;
-    // }
-
     globalContext.setCarData((prev) => ({
       ...prev,
       dealer: {

@@ -5,20 +5,37 @@ import {
   total_used,
   total_dealers,
 } from "../../assets/images/images";
+import { ClipLoader } from "react-spinners";
 
 import styles from "./dashboard-page.module.css";
 import DashboardLayout from "../../components/dashboard-layout/DashboardLayout";
 import useGetTotals from "../../hooks/useGetTotal";
 
 const DashboardPage = () => {
+  const { data, isLoading, error } = useGetTotals();
 
-  const {data, isLoading, error} = useGetTotals();
+  if (isLoading)
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+        }}
+      >
+        <ClipLoader color="#3498db" size={35} />
+      </div>
+    );
 
-  if(isLoading) return <div> is Loading</div>
-  if (error) return <div>{error?.message}</div>
+  if (error) return <div>{error?.message}</div>;
 
   const totalCards = [
-    { image: total_cars, header: data?.totalCars  || 0, total_text: "Total number of cars" },
+    {
+      image: total_cars,
+      header: data?.totalCars || 0,
+      total_text: "Total number of cars",
+    },
     {
       image: total_used,
       header: data?.totalUsed || 0,
@@ -26,7 +43,7 @@ const DashboardPage = () => {
     },
     {
       image: total_damaged,
-      header: data?.totalDamaged  || 0,
+      header: data?.totalDamaged || 0,
       total_text: "Total number of damaged Cars",
     },
     {

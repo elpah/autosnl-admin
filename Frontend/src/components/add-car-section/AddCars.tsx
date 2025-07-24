@@ -125,7 +125,9 @@ const AddCars = () => {
           },
           onError: (err) => {
             notifyError("Something went wrong while submitting.");
-            console.error(err);
+            if (import.meta.env.VITE_NODE_ENV!== "production") {
+              console.error(err);
+            }
           },
         });
       }

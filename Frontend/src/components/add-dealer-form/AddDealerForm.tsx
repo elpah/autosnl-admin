@@ -1,19 +1,11 @@
 import useDealers from "../../hooks/useDealers";
-import { useContext, useEffect } from "react";
-import {
-  GlobalContext,
-  IDealer,
-} from "../../context/GlobalContext";
+import { useContext } from "react";
+import { GlobalContext, IDealer } from "../../context/GlobalContext";
 
 import styles from "./add-dealer-form.module.css";
 const AddDealerForm = () => {
   const globalContext = useContext(GlobalContext);
   const { data: dealerData, isLoading: dealerIsLoading } = useDealers();
-
-  useEffect(
-    () => console.table(globalContext.carData),
-    [globalContext.carData]
-  );
 
   const updateDealerField = (field: keyof IDealer, value: string) => {
     if (field === "dealerId") {

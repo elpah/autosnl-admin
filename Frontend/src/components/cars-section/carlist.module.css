@@ -36,7 +36,7 @@
   }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 500px) {
   .container {
     .cars_container {
       margin: auto;
@@ -47,6 +47,16 @@
   }
 }
 
+@media (min-width: 900px) {
+  .container {
+    .cars_container {
+      margin: auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+  }
+}
 @media (min-width: 1024px) {
   .container {
     .cars_container {

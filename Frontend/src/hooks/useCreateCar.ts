@@ -25,7 +25,9 @@ const useCreateCar = () => {
         );
         return response.data;
       } catch (error) {
-        console.error("Error submitting car data:", error);
+        if (import.meta.env.VITE_NODE_ENV !== "production") {
+          console.error("Error submitting car data:", error);
+        }
         throw error;
       }
     },

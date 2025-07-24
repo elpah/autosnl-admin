@@ -21,7 +21,7 @@ export type GetCarsParams = {
   brand: string;
   model: string;
   category: string;
-  sortBy:"price_asc" | "price_desc" | "none";
+  sortBy: "price_asc" | "price_desc" | "none";
 };
 
 export const initialGetCarsParams: GetCarsParams = {
@@ -29,7 +29,7 @@ export const initialGetCarsParams: GetCarsParams = {
   model: "",
   category: "",
   pageNumber: 1,
-  sortBy:"none"
+  sortBy: "none",
 };
 
 export type IOther = {

@@ -239,6 +239,7 @@ const AddBasicInfo = ({
             Object.keys(brandModelData.brands).map((brand) => {
               const brandData = brandModelData.brands[brand];
               const brandName = brandData.name[globalContext.currentLanguage];
+              if (!brandName || brandName.trim() === "") return null;
               return (
                 <option key={brand} value={brandName}>
                   {brandName}
@@ -314,12 +315,11 @@ const AddBasicInfo = ({
         >
           {(() => {
             if (!brandModelData?.brands) {
-              return (
-                <>
-                  <option disabled>Select a brand first</option>
-                  <option value="other">Other</option>
-                </>
-              );
+              globalContext.setOther((prev) => ({
+                ...prev,
+                carBrand: "other",
+              }));
+              return;
             }
             const selectedBrandLabel =
               globalContext.carData.lang[globalContext.currentLanguage]
@@ -337,12 +337,17 @@ const AddBasicInfo = ({
             if (matchedBrand) {
               return (
                 <>
-                  <option disabled>Select a Model</option>
+                  <option disabled value="">
+                    Select a Model
+                  </option>
                   <option value="other">Other</option>
                   {Object.entries(matchedBrand.models).map(
                     ([modelKey, modelData]) => {
                       const translatedModel =
                         modelData[globalContext.currentLanguage];
+                      if (!translatedModel || translatedModel.trim() === "")
+                        return null;
+
                       return (
                         <option key={modelKey} value={translatedModel}>
                           {translatedModel}
@@ -356,7 +361,10 @@ const AddBasicInfo = ({
 
             return (
               <>
-                <option disabled>Select a brand first</option>
+                <option disabled value="">
+                  {" "}
+                  Select a brand first
+                </option>
                 <option value="other">Other</option>
               </>
             );
@@ -385,8 +393,6 @@ const AddBasicInfo = ({
             globalContext.carData.lang[globalContext.currentLanguage].carCountry
           }
           onChange={(e) => {
-            console.log("e.target.value:", e.target.value);
-
             const selectedCountryKeys = Object.keys(
               brandModelData!.countries
             ).find((key) => {
@@ -585,7 +591,6 @@ const AddBasicInfo = ({
             });
 
             if (selectedVanish) {
-              console.log(selectedVanish);
               const translations = vanishData[selectedVanish];
               updateTranslationFieldFunctionBrandModel(
                 "carVanish",

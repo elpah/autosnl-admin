@@ -30,28 +30,28 @@ const PreviewPage = ({ handleButtonClick }: PreviewPageProps) => {
     { code: "ua", label: "Ukrainian" },
   ];
 
-  if(dealerError){
-    return<div>Error Loading dealers</div>
+  if (dealerError) {
+    return <div>Error Loading dealers</div>;
   }
 
   if (dealerIsLoading) return <div>Loading...</div>;
-  const getDealerInfo = (): IDealer | null | any => {
+
+  const getDealerInfo = (): IDealer | string | null => {
     const dealer = globalContext.carData.dealer;
-
-    if (typeof dealer === "object" && dealer !== null && "dealerId" in dealer) {
-      return dealer;
-    }
-
-    if (typeof dealer === "string") {
-      return (
-        dealerData?.find((dealerItem) => dealerItem.dealerId === dealer) || null
-      );
+    if (typeof dealer === "object") {
+      if (!dealer.dealerId) {
+        return dealer;
+      }
+      if (dealer.dealerId) {
+        return (
+          dealerData?.find(
+            (dealerItem) => dealerItem.dealerId === dealer.dealerId
+          ) || null
+        );
+      }
     }
     return null;
   };
-
-  const dealerInfo = getDealerInfo();
-  const finalDealerInfo = dealerInfo || globalContext.carData.dealer;
 
   return (
     <div className={styles.car_page_container}>
@@ -106,7 +106,7 @@ const PreviewPage = ({ handleButtonClick }: PreviewPageProps) => {
         options={
           globalContext.carData.lang[globalContext.carPageLang].carOptions
         }
-        dealerInfo={finalDealerInfo} // Ensure this is always of type IDealer
+        dealerInfo={getDealerInfo() || globalContext.carData.dealer}
       />
       <CarPageDesktop
         coverImages={globalContext.carData.carImages}
@@ -140,7 +140,7 @@ const PreviewPage = ({ handleButtonClick }: PreviewPageProps) => {
         options={
           globalContext.carData.lang[globalContext.carPageLang].carOptions
         }
-        dealerInfo={finalDealerInfo}
+        dealerInfo={getDealerInfo() || globalContext.carData.dealer}
       />
     </div>
   );

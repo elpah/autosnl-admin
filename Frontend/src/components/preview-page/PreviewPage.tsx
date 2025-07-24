@@ -36,7 +36,7 @@ const PreviewPage = ({ handleButtonClick }: PreviewPageProps) => {
 
   if (dealerIsLoading) return <div>Loading...</div>;
 
-  const getDealerInfo = (): IDealer | string | null => {
+  const getDealerInfo = (): IDealer | null => {
     const dealer = globalContext.carData.dealer;
     if (typeof dealer === "object") {
       if (!dealer.dealerId) {

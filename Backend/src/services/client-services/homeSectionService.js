@@ -37,8 +37,7 @@ export const getHomeSections = async () => {
           "lang.ru.carBody": 1,
           carMileage: 1,
           carERD: 1,
-         price_incl_btw:1
-
+          price_incl_btw: 1,
         })
         .limit(30)
         .toArray();
@@ -70,7 +69,9 @@ export const getHomeSections = async () => {
     };
     return { sections };
   } catch (error) {
-    console.error("Error fetching home sections:", error);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Error fetching home sections:", error);
+    }
     throw new Error("Query failed");
   }
 };

@@ -20,7 +20,9 @@ const addNewCar = async (carData) => {
 
     return newCar.carId;
   } catch (err) {
-    console.error("Error in addNewCar:", err.message);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Error in addNewCar:", err.message);
+    }
     return null;
   }
 };
@@ -86,7 +88,6 @@ const getAllCars = async (params) => {
   if (carCategory) {
     query["lang.en.carType"] = { $regex: new RegExp(`^${carCategory}$`, "i") };
   }
-  const defaultSort = { createdAt: -1 };
 
   try {
     if (type === "available") {
@@ -94,7 +95,6 @@ const getAllCars = async (params) => {
       cars = await carCol
         .find(query, { projection })
         .sort(sortOptions)
-
         .skip(skip)
         .limit(limit)
         .toArray();
@@ -108,7 +108,6 @@ const getAllCars = async (params) => {
         .toArray();
     }
 
-
     const dealerIds = [
       ...new Set(cars.map((car) => car.dealer).filter(Boolean)),
     ];
@@ -121,15 +120,30 @@ const getAllCars = async (params) => {
       dealers.map((dealer) => [dealer.dealerId, dealer.dealerName])
     );
 
+    cars.forEach((car) => {
+      if (
+        Array.isArray(car.carImages) &&
+        car.carImages.length > 0 &&
+        typeof car.carImages[0] === "object" &&
+        car.carImages[0] !== null &&
+        "url" in car.carImages[0]
+      ) {
+        let newImages = car.carImages.map((img) => img.url);
+        car.carImages = newImages;
+      }
+    });
+
     const updatedCars = cars.map((car) => ({
       ...car,
       carImages: [car.carImages[0]],
-      dealer: dealerMap[car.dealer] || null, 
+      dealer: dealerMap[car.dealer] || null,
     }));
 
-    return { totalCars, cars:updatedCars };
+    return { totalCars, cars: updatedCars };
   } catch (error) {
-    console.error("Error in getAllCars function:", error);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Error in getAllCars function:", error);
+    }
     throw new Error("Failed to fetch cars. Please try again later.");
   }
 };
@@ -140,7 +154,7 @@ const getCarById = async (carId) => {
     const carCol = db.collection("cars");
     const dealerCol = db.collection("dealers");
 
-    const car = await carCol.findOne(
+    let car = await carCol.findOne(
       { carId: carId },
       { projection: { _id: 0 } }
     );
@@ -159,10 +173,23 @@ const getCarById = async (carId) => {
         }
       );
       car.dealer = dealerInfo;
+
+      if (
+        Array.isArray(car.carImages) &&
+        car.carImages.length > 0 &&
+        typeof car.carImages[0] === "object" &&
+        car.carImages[0] !== null &&
+        "url" in car.carImages[0]
+      ) {
+        let newImages = car.carImages.map((img) => img.url);
+        car.carImages = newImages;
+      }
     }
     return car;
   } catch (err) {
-    console.error("Error in getCarById:", err.message);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Error in getCarById:", err.message);
+    }
     return null;
   }
 };
@@ -216,7 +243,9 @@ const deleteCarById = async (carId) => {
 
     return { success: true, message: "Car deleted successfully." };
   } catch (err) {
-    console.error("Error deleting car:", err.message);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Error deleting car:", err.message);
+    }
     return { success: false, message: err.message };
   } finally {
     await session.endSession();
@@ -266,7 +295,9 @@ const recommendCarById = async (carId) => {
       }.`,
     };
   } catch (err) {
-    console.error("Error recommending car:", err.message);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Error recommending car:", err.message);
+    }
     return { success: false, message: err.message };
   } finally {
     await session.endSession();
@@ -308,7 +339,9 @@ const restoreCar = async (carId) => {
 
     return { success: true, message: "Car restored successfully." };
   } catch (err) {
-    console.error("Error restoring car:", err.message);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Error restoring car:", err.message);
+    }
     return { success: false, message: err.message };
   } finally {
     await session.endSession();
@@ -331,7 +364,9 @@ const permanentDeleteCarById = async (carId) => {
 
     return { success: true, message: "Car permanently deleted" };
   } catch (err) {
-    console.error("Error deleting car permanently:", err.message);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Error deleting car permanently:", err.message);
+    }
     return { success: false, message: "Internal server error" };
   }
 };

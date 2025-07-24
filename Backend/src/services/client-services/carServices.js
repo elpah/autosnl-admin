@@ -11,7 +11,9 @@ const createNewCar = async (carData) => {
     await col.insertOne(newCar);
     return newCar;
   } catch (err) {
-    console.log(err);
+    if (process.env.NODE_ENV !== "production") {
+      console.log(err);
+    }
   }
 };
 const getCarById = async (id) => {
@@ -20,16 +22,30 @@ const getCarById = async (id) => {
     const col = db.collection("cars");
     const colDealer = db.collection("dealers");
     let dealer = null;
-    const car = await col.findOne({ carId: id });
+    let car = await col.findOne({ carId: id });
     if (car) {
       dealer = await colDealer.findOne(
         { dealerId: car.dealer },
         { projection: { cars: 0 } }
       );
     }
+
+    if (
+      Array.isArray(car.carImages) &&
+      car.carImages.length > 0 &&
+      typeof car.carImages[0] === "object" &&
+      car.carImages[0] !== null &&
+      "url" in car.carImages[0]
+    ) {
+      let newImages = car.carImages.map((img) => img.url);
+      car.carImages = newImages;
+    }
+
     return { car, dealer };
   } catch (error) {
-    console.error("Error fetching car and dealer:", error);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Error fetching car and dealer:", error);
+    }
     throw new Error("Could not fetch car and dealer data.");
   }
 };
@@ -38,7 +54,21 @@ const getAllCars = async (page = 1, limit = 20) => {
   const db = await connectToDatabase();
   const col = db.collection("cars");
   const skip = (page - 1) * limit;
-  const cars = await col.find({}).skip(skip).limit(limit).toArray();
+  let cars = await col.find({}).skip(skip).limit(limit).toArray();
+
+  cars.forEach((car) => {
+    if (
+      Array.isArray(car.carImages) &&
+      car.carImages.length > 0 &&
+      typeof car.carImages[0] === "object" &&
+      car.carImages[0] !== null &&
+      "url" in car.carImages[0]
+    ) {
+      let newImages = car.carImages.map((img) => img.url);
+      car.carImages = newImages;
+    }
+  });
+
   return cars;
 };
 
@@ -85,11 +115,24 @@ const getCarsWithFilters = async (filters = {}, page = 1, limit = 30) => {
     carERD: 1,
   };
   const totalCars = await col.countDocuments(query);
-  const cars = await col
+  let cars = await col
     .find(query, { projection })
     .skip(skip)
     .limit(limit)
     .toArray();
+
+  cars.forEach((car) => {
+    if (
+      Array.isArray(car.carImages) &&
+      car.carImages.length > 0 &&
+      typeof car.carImages[0] === "object" &&
+      car.carImages[0] !== null &&
+      "url" in car.carImages[0]
+    ) {
+      let newImages = car.carImages.map((img) => img.url);
+      car.carImages = newImages;
+    }
+  });
 
   return { totalCars, cars };
 };
@@ -180,12 +223,25 @@ const getCarsWithMultiFilters = async (filters = {}, page = 1, limit = 30) => {
     carERD: 1,
   };
 
-  const cars = await col
+  let cars = await col
     .find(query, { projection })
     .sort(filters.sortOptions)
     .skip(skip)
     .limit(limit)
     .toArray();
+
+  cars.forEach((car) => {
+    if (
+      Array.isArray(car.carImages) &&
+      car.carImages.length > 0 &&
+      typeof car.carImages[0] === "object" &&
+      car.carImages[0] !== null &&
+      "url" in car.carImages[0]
+    ) {
+      let newImages = car.carImages.map((img) => img.url);
+      car.carImages = newImages;
+    }
+  });
   return {
     totalCars,
     cars,
@@ -280,11 +336,24 @@ const getCarByDealerId = async (filters = {}, page = 1, limit = 30) => {
     carERD: 1,
   };
 
-  const cars = await carsCol
+  let cars = await carsCol
     .find(query, { projection })
     .skip((page - 1) * limit)
     .limit(limit)
     .toArray();
+
+  cars.forEach((car) => {
+    if (
+      Array.isArray(car.carImages) &&
+      car.carImages.length > 0 &&
+      typeof car.carImages[0] === "object" &&
+      car.carImages[0] !== null &&
+      "url" in car.carImages[0]
+    ) {
+      let newImages = car.carImages.map((img) => img.url);
+      car.carImages = newImages;
+    }
+  });
 
   return { totalCars, dealer, cars };
 };

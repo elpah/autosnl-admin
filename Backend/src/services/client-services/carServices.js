@@ -140,9 +140,7 @@ const getCarsWithFilters = async (filters = {}, page = 1, limit = 30) => {
 const getCarsWithMultiFilters = async (filters = {}, page = 1, limit = 30) => {
   const db = await connectToDatabase();
   const col = db.collection("cars");
-
   const skip = (page - 1) * limit;
-
   let query = {};
 
   if (filters.carType)

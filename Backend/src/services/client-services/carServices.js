@@ -223,7 +223,7 @@ const getCarsWithMultiFilters = async (filters = {}, page = 1, limit = 30) => {
 
   let cars = await col
     .find(query, { projection })
-    .sort(filters.sortOptions)
+    .sort(filters.sortBy)
     .skip(skip)
     .limit(limit)
     .toArray();

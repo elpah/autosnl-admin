@@ -8,7 +8,11 @@ import {
 } from "../services/client-services/carServices.js";
 import { getHomeSections } from "../services/client-services/homeSectionService.js";
 import { getBrandModelsCountries } from "../services/client-services/brandModelCountryServices.js";
-import { processArrays, parseNums } from "../utils/utils.js";
+import {
+  processArrays,
+  parseNums,
+  normalizeQueryArray,
+} from "../utils/utils.js";
 
 const clientRouter = Router();
 
@@ -64,21 +68,28 @@ clientRouter.get("/cars-search", async (req, res) => {
 clientRouter.get("/advanced-search", async (req, res) => {
   let {
     carType,
-    brand,
-    model,
-    vehicleType,
-    fuel,
+    "brand[]": brand,
+    "model[]": model,
+    "vehicleType[]": vehicleType,
+    "transmission[]": transmission,
+    "fuel[]": fuel,
+    "country[]": country,
     priceMin,
     priceMax,
     mileageMin,
     mileageMax,
-    transmission,
     erdMin,
     erdMax,
-    country,
     pageNumber,
     sortBy,
   } = req.query;
+
+  brand = normalizeQueryArray(brand);
+  model = normalizeQueryArray(model);
+  vehicleType = normalizeQueryArray(vehicleType);
+  transmission = normalizeQueryArray(transmission);
+  fuel = normalizeQueryArray(fuel);
+  country = normalizeQueryArray(country);
 
   let sortOptions = {};
 
@@ -121,21 +132,28 @@ clientRouter.get("/advanced-search", async (req, res) => {
 clientRouter.get("/carByDealerId", async (req, res) => {
   let {
     carType,
-    brand,
-    model,
-    vehicleType,
-    fuel,
+    "brand[]": brand,
+    "model[]": model,
+    "vehicleType[]": vehicleType,
+    "transmission[]": transmission,
+    "fuel[]": fuel,
+    "country[]": country,
     priceMin,
     priceMax,
     mileageMin,
     mileageMax,
-    transmission,
     erdMin,
     erdMax,
-    country,
     pageNumber,
     dealerId,
   } = req.query;
+
+  brand = normalizeQueryArray(brand);
+  model = normalizeQueryArray(model);
+  vehicleType = normalizeQueryArray(vehicleType);
+  transmission = normalizeQueryArray(transmission);
+  fuel = normalizeQueryArray(fuel);
+  country = normalizeQueryArray(country);
 
   if (brand && brand.includes("All Brands")) {
     brand = [];

@@ -150,7 +150,7 @@ function App() {
         )}
         <Suspense fallback={<div>Fallback testing</div>}>
           <Routes>
-          <Route path="/" element={<HomeRedirect />} />
+            <Route path="/" element={<HomeRedirect />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/dashboard" element={<DashboardPage />} />

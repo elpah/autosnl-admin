@@ -27,6 +27,7 @@ import ShowModal from "./components/show-modal/ShowModal";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "./firebase.ts";
 import Loader from "./components/loader/Loader.tsx";
+import HomeRedirect from "./pages/homeRedirect/HomeRedirect.tsx";
 
 function App() {
   const [authUser, setAuthUser] = useState<User | null>(null);
@@ -149,6 +150,7 @@ function App() {
         )}
         <Suspense fallback={<div>Fallback testing</div>}>
           <Routes>
+            <Route path="/" element={<HomeRedirect />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/dashboard" element={<DashboardPage />} />

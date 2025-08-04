@@ -1,3 +1,4 @@
+import { User } from "firebase/auth";
 import { createContext } from "react";
 
 export type CarOptionCategories = {
@@ -185,6 +186,10 @@ export interface IGlobalContext {
   setPendingLink: React.Dispatch<React.SetStateAction<string | null>>;
   getCarsParams: GetCarsParams;
   setGetCarsParams: React.Dispatch<React.SetStateAction<GetCarsParams>>;
+  authUser: User | null;
+  setAuthUser: React.Dispatch<React.SetStateAction<User | null>>;
+  authLoading: boolean;
+  setAuthLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const GlobalContext = createContext<IGlobalContext>({
@@ -208,4 +213,8 @@ export const GlobalContext = createContext<IGlobalContext>({
   setPendingLink: () => {},
   getCarsParams: initialGetCarsParams,
   setGetCarsParams: () => {},
+  authUser: null,
+  setAuthUser: () => {},
+  authLoading:true,
+  setAuthLoading:()=>{}
 });

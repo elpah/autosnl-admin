@@ -2,6 +2,7 @@ import { useContext } from "react";
 import styles from "./sidenav.module.css";
 import { GlobalContext } from "../../context/GlobalContext";
 import { useNavigate } from "react-router-dom";
+import { handleSignOut } from "../../utils/utilFunctions";
 
 const SideNav = () => {
   const navigate = useNavigate();
@@ -172,7 +173,7 @@ const SideNav = () => {
             globalContext.activeMenu === "sign out" ? styles.active : ""
           }
           onClick={() => {
-            globalContext.setActiveMenu("sign out");
+            handleSignOut(navigate);
           }}
         >
           <svg

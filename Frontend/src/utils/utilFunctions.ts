@@ -1,3 +1,6 @@
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase";
+
 export const handleScrollToTop = () => {
   if (document.documentElement.scrollTop !== undefined) {
     document.documentElement.scrollTo({
@@ -11,5 +14,14 @@ export const handleScrollToTop = () => {
       left: 0,
       behavior: "smooth",
     });
+  }
+};
+
+export const handleSignOut = async (navigate: (path: string) => void) => {
+  try {
+    await signOut(auth);
+    navigate("/signin");
+  } catch (error) {
+    console.error("Error signing out: ", error);
   }
 };

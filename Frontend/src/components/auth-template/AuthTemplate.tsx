@@ -4,10 +4,10 @@ import styles from "./auth-template.module.css";
 type IAuthTemplateProps = {
   logoHeader: string;
   subText: string;
-  orText:string;
+  orText: string;
   subSpanText: string;
   children: React.ReactNode;
-  handleSubSpanClick:()=>void;
+  handleSubSpanClick: () => void;
 };
 const AuthTemplate = ({
   logoHeader,
@@ -15,8 +15,7 @@ const AuthTemplate = ({
   orText,
   subSpanText,
   children,
-  handleSubSpanClick
-  
+  handleSubSpanClick,
 }: IAuthTemplateProps) => {
   return (
     <div className={styles.left}>
@@ -33,7 +32,9 @@ const AuthTemplate = ({
         <AuthSocials />
         <p className={styles.create_account}>
           {subText}
-          <span className={styles.sign_up} onClick={handleSubSpanClick}>{subSpanText}</span>
+          <span className={styles.sign_up} onClick={handleSubSpanClick}>
+            {subSpanText}
+          </span>
         </p>
       </div>
     </div>

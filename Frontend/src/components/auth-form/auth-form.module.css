@@ -21,13 +21,13 @@
     font-weight: 300;
     border-radius: 2px;
     &:focus {
-      outline: 1px solid var(--primary-color); 
+      outline: 1px solid var(--primary-color);
       border-radius: 2px;
     }
   }
-  .input_email {
-  }
-  .input_password {
+  .error {
+    color: red;
+    font-size: 14px;
   }
   .forgot_password {
     color: var(--primary-color);

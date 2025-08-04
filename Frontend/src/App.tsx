@@ -5,6 +5,7 @@ import SignUp from "./pages/signup/SignUp";
 import DashboardPage from "./pages/dashboard/DashboardPage";
 import CarsPage from "./pages/carsPage/CarsPage";
 import SettingPage from "./pages/settingsPage/SettingPage";
+
 import {
   GlobalContext,
   ICarData,
@@ -23,10 +24,14 @@ import AddCarPage from "./pages/addCarPage/AddCarPage";
 import EditCarPage from "./pages/editCarPage/EditCarPage";
 import NotFound from "./pages/notFoundPage/NotFound";
 import ShowModal from "./components/show-modal/ShowModal";
+import { onAuthStateChanged, User } from "firebase/auth";
+import { auth } from "./firebase.ts";
+import Loader from "./components/loader/Loader.tsx";
 
 function App() {
+  const [authUser, setAuthUser] = useState<User | null>(null);
+  const [authLoading, setAuthLoading] = useState(true);
   const navigate = useNavigate();
-
   const [currentLanguage, setCurrentLanguage] = useState<
     "en" | "ru" | "nl" | "ua"
   >("en");
@@ -44,6 +49,24 @@ function App() {
   const [pendingLink, setPendingLink] = useState<string | null>(null);
   const [getCarsParams, setGetCarsParams] =
     useState<GetCarsParams>(initialGetCarsParams);
+
+  useEffect(() => {
+    const listen = onAuthStateChanged(auth, (user) => {
+      user ? setAuthUser(user) : navigate("/signin");
+      setAuthLoading(false);
+    });
+    return () => {
+      listen();
+      setAuthLoading(true);
+    };
+  }, [authUser]);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setAuthUser(user);
+    });
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     if (
@@ -70,6 +93,21 @@ function App() {
     }
   };
 
+  if (authLoading) {
+    return (
+      <div
+        style={{
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Loader />
+      </div>
+    );
+  }
+
   return (
     <>
       <GlobalContext.Provider
@@ -94,6 +132,10 @@ function App() {
           setPendingLink,
           getCarsParams,
           setGetCarsParams,
+          authUser,
+          setAuthUser,
+          authLoading,
+          setAuthLoading,
         }}
       >
         {showModal && (

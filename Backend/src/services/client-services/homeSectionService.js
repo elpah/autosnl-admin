@@ -12,6 +12,7 @@ export const getHomeSections = async () => {
       throw new Error("Home sections not found");
     }
     const { recommended, trusted, damaged } = homeSectionDoc;
+
     const fetchCarsAndBrandsBySection = async (carIds) => {
       const cars = await db
         .collection("cars")
@@ -41,8 +42,20 @@ export const getHomeSections = async () => {
         })
         .limit(30)
         .toArray();
+
+      const normalizedCars = cars.map((car) => {
+        if (
+          Array.isArray(car.carImages) &&
+          car.carImages.every((img) => typeof img === "object" && img?.url)
+        ) {
+          car.carImages = car.carImages.map((img) => img.url);
+        }
+        car.carImages = [car.carImages[0]];
+        return car;
+      });
+
       const body = {};
-      cars.forEach((car) => {
+      normalizedCars.forEach((car) => {
         const bodyType = car.lang.en.carBody;
         if (!body[bodyType]) {
           body[bodyType] = {
@@ -54,14 +67,18 @@ export const getHomeSections = async () => {
         }
       });
 
-      return { cars, body };
+      return { cars: normalizedCars, body };
     };
-    const { cars: recommendedCars, body: recommendedBrands } =
+
+    let { cars: recommendedCars, body: recommendedBrands } =
       await fetchCarsAndBrandsBySection(recommended);
-    const { cars: trustedCars, body: trustedBrands } =
+
+    let { cars: trustedCars, body: trustedBrands } =
       await fetchCarsAndBrandsBySection(trusted);
-    const { cars: damagedCars, body: damagedBrands } =
+
+    let { cars: damagedCars, body: damagedBrands } =
       await fetchCarsAndBrandsBySection(damaged);
+
     const sections = {
       recommended: { cars: recommendedCars, body: recommendedBrands },
       trusted: { cars: trustedCars, body: trustedBrands },

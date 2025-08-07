@@ -45,4 +45,12 @@ const uploadImage = async (file) => {
   return result;
 };
 
-export { uploadImage };
+async function deleteCloudinaryImage(publicId) {
+  try {
+    await cloudinary.uploader.destroy(publicId);
+  } catch (error) {
+    console.error("Cloudinary deletion error:", error);
+  }
+}
+
+export { uploadImage, deleteCloudinaryImage };

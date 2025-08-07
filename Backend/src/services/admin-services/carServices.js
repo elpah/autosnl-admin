@@ -1,6 +1,7 @@
 import client from "../../config/client.js";
 
 import { connectToDatabase } from "../../config/db.js";
+import { deleteCloudinaryImage } from "./cloudinary.js";
 import { randomUUID } from "crypto";
 
 const addNewCar = async (carData) => {
@@ -356,6 +357,19 @@ const permanentDeleteCarById = async (carId) => {
     const db = await connectToDatabase();
     const deletedCol = db.collection("deletedCars");
 
+    const car = await deletedCol.findOne({ carId });
+
+    if (!car) {
+      return { success: false, message: "Car not found or already deleted" };
+    }
+
+    if (car.carImages && Array.isArray(car.carImages)) {
+      for (const image of car.carImages) {
+        if (image.public_id) {
+          await deleteCloudinaryImage(image.public_id);
+        }
+      }
+    }
     const result = await deletedCol.deleteOne({ carId });
 
     if (result.deletedCount === 0) {

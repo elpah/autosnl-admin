@@ -2,11 +2,7 @@ import { useContext, useState } from "react";
 
 import PasswordInput from "../passwordInput/PasswordInput";
 import styles from "./settings-section.module.css";
-import {
-  GlobalContext,
-  initialUser,
-  type IUser,
-} from "../../context/GlobalContext";
+import { GlobalContext, type IUser } from "../../context/GlobalContext";
 const SettingsSection = () => {
   const globalContext = useContext(GlobalContext);
   const [currentPassword, setCurrentPassword] = useState("");
@@ -14,7 +10,6 @@ const SettingsSection = () => {
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
 
   const [userInfo, setUserInfo] = useState<IUser>(globalContext.loggedUser);
-  
 
   const handleChange = (field: keyof IUser, value: string | File) => {
     setUserInfo((prev) => ({
@@ -22,7 +17,7 @@ const SettingsSection = () => {
       [field]: value,
     }));
   };
-  
+
   return (
     <div className={styles.container}>
       <div className={styles.left}>
@@ -69,24 +64,21 @@ const SettingsSection = () => {
               value={userInfo.firstname}
               type="text"
               placeholder="First name"
-              onChange={(e)=>handleChange("firstname", e.target.value)}
+              onChange={(e) => handleChange("firstname", e.target.value)}
             />
             <input
               value={userInfo.lastname}
               type="text"
               placeholder="Last name"
-              onChange={(e)=>handleChange("lastname", e.target.value)}
-
+              onChange={(e) => handleChange("lastname", e.target.value)}
             />
           </div>
           {/* <label htmlFor="">Username</label>
           <input type="text" placeholder="Enter your Username" /> */}
           <label htmlFor="">Email</label>
           <input
-
             value={userInfo.email}
-            onChange={(e)=>handleChange("email", e.target.value)}
-
+            onChange={(e) => handleChange("email", e.target.value)}
             type="text"
             name=""
             id=""

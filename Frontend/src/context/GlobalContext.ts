@@ -1,6 +1,22 @@
 import { User } from "firebase/auth";
 import { createContext } from "react";
 
+export type IUser = {
+  firebaseUid: string;
+  profileImage: File | string;
+  firstname: string;
+  lastname: string;
+  email: string;
+};
+
+export const initialUser = {
+  profileImage: "",
+  firstname: "",
+  lastname: "",
+  email: "",
+  firebaseUid: "",
+};
+
 export type CarOptionCategories = {
   airbag: string[];
   coolingAndHeating: string[];
@@ -190,6 +206,8 @@ export interface IGlobalContext {
   setAuthUser: React.Dispatch<React.SetStateAction<User | null>>;
   authLoading: boolean;
   setAuthLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  loggedUser: IUser;
+  setLoggedUser: React.Dispatch<React.SetStateAction<IUser>>;
 }
 
 export const GlobalContext = createContext<IGlobalContext>({
@@ -215,6 +233,8 @@ export const GlobalContext = createContext<IGlobalContext>({
   setGetCarsParams: () => {},
   authUser: null,
   setAuthUser: () => {},
-  authLoading:true,
-  setAuthLoading:()=>{}
+  authLoading: true,
+  setAuthLoading: () => {},
+  loggedUser: initialUser,
+  setLoggedUser: () => {},
 });

@@ -1,11 +1,28 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import PasswordInput from "../passwordInput/PasswordInput";
 import styles from "./settings-section.module.css";
+import {
+  GlobalContext,
+  initialUser,
+  type IUser,
+} from "../../context/GlobalContext";
 const SettingsSection = () => {
+  const globalContext = useContext(GlobalContext);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
+
+  const [userInfo, setUserInfo] = useState<IUser>(globalContext.loggedUser);
+  
+
+  const handleChange = (field: keyof IUser, value: string | File) => {
+    setUserInfo((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+  
   return (
     <div className={styles.container}>
       <div className={styles.left}>
@@ -14,7 +31,13 @@ const SettingsSection = () => {
           <div className={styles.image_container}>
             <img
               className={styles.image}
-              src="https://images.unsplash.com/photo-1603415526960-f7e0328c63b1?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cHJvZmlsZSUyMHBpY3R1cmV8ZW58MHx8MHx8fDA%3D"
+              src={
+                typeof userInfo.profileImage === "string"
+                  ? userInfo.profileImage
+                  : userInfo.profileImage
+                  ? URL.createObjectURL(userInfo.profileImage)
+                  : undefined
+              }
               alt="profile photo"
             />
             <div className={styles.icon_text}>
@@ -42,13 +65,33 @@ const SettingsSection = () => {
         <form className={styles.personal_info}>
           <label htmlFor="">Full name</label>
           <div className={styles.names_container}>
-            <input type="text" placeholder="First name" />
-            <input type="text" placeholder="Last name" />
+            <input
+              value={userInfo.firstname}
+              type="text"
+              placeholder="First name"
+              onChange={(e)=>handleChange("firstname", e.target.value)}
+            />
+            <input
+              value={userInfo.lastname}
+              type="text"
+              placeholder="Last name"
+              onChange={(e)=>handleChange("lastname", e.target.value)}
+
+            />
           </div>
-          <label htmlFor="">Username</label>
-          <input type="text" placeholder="Enter your Username" />
+          {/* <label htmlFor="">Username</label>
+          <input type="text" placeholder="Enter your Username" /> */}
           <label htmlFor="">Email</label>
-          <input type="text" name="" id="" placeholder="Enter your email" />
+          <input
+
+            value={userInfo.email}
+            onChange={(e)=>handleChange("email", e.target.value)}
+
+            type="text"
+            name=""
+            id=""
+            placeholder="Enter your email"
+          />
           <button>Save changes</button>
         </form>
         <form className={styles.password_reset}>

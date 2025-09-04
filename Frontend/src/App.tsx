@@ -12,11 +12,13 @@ import {
   initialCarData,
   initialOther,
   IOther,
+  initialGetCarsParams,
+  initialUser,
   type MenuOption,
   type Lang,
   type currentActionType,
   type GetCarsParams,
-  initialGetCarsParams,
+  type IUser,
 } from "./context/GlobalContext";
 
 import "./App.css";
@@ -28,9 +30,11 @@ import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "./firebase.ts";
 import Loader from "./components/loader/Loader.tsx";
 import HomeRedirect from "./pages/homeRedirect/HomeRedirect.tsx";
+import useGetUser from "./hooks/useGetUser.ts";
 
 function App() {
   const [authUser, setAuthUser] = useState<User | null>(null);
+  const [loggedUser, setLoggedUser] = useState<IUser>(initialUser);
   const [authLoading, setAuthLoading] = useState(true);
   const navigate = useNavigate();
   const [currentLanguage, setCurrentLanguage] = useState<
@@ -51,21 +55,31 @@ function App() {
   const [getCarsParams, setGetCarsParams] =
     useState<GetCarsParams>(initialGetCarsParams);
 
+  const { data } = useGetUser(
+    authUser?.uid || "",
+    authUser?.email || ""
+  );
   useEffect(() => {
-    const listen = onAuthStateChanged(auth, (user) => {
-      user ? setAuthUser(user) : navigate("/signin");
-      setAuthLoading(false);
-    });
-    return () => {
-      listen();
-      setAuthLoading(true);
-    };
-  }, [authUser]);
+    if (data) {
+      setLoggedUser(data);
+    }
+  }, [data]);
+  
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        //   const token = await user.getIdToken();
+        // console.log("Token:", token);
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setAuthUser(user);
+        setAuthUser(user);
+        setAuthLoading(false);
+      } else {
+        setAuthUser(null);
+        setAuthLoading(false);
+        navigate("/signin");
+      }
     });
+
     return () => unsubscribe();
   }, []);
 
@@ -137,6 +151,8 @@ function App() {
           setAuthUser,
           authLoading,
           setAuthLoading,
+          loggedUser,
+          setLoggedUser,
         }}
       >
         {showModal && (

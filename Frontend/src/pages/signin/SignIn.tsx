@@ -41,22 +41,24 @@ const SignIn = () => {
 
   return (
     <div className={styles.container}>
-      <AuthTemplate
-        handleSubSpanClick={() => navigate("/signup")}
-        orText="or sign in with"
-        logoHeader="ZaurAutos"
-        subText="You dont have an account? "
-        subSpanText="Sign Up"
-      >
-        <AuthForm
-          loginInfo={loginInfo}
-          setLoginInfo={setLoginInfo}
-          subText="Forgotten Password?"
-          errorMessage={errorMessage}
+      <div className={styles.left_content}>
+        <AuthTemplate
+          handleSubSpanClick={() => navigate("/signup")}
+          orText="or sign in with"
+          logoHeader="ZaurAutos"
+          subText="You dont have an account? "
+          subSpanText="Sign Up"
         >
-          <AuthButton handleSubmit={handleSignIn} text="Sign In" />
-        </AuthForm>
-      </AuthTemplate>
+          <AuthForm
+            loginInfo={loginInfo}
+            setLoginInfo={setLoginInfo}
+            subText="Forgotten Password?"
+            errorMessage={errorMessage}
+          >
+            <AuthButton handleSubmit={handleSignIn} text="Sign In" />
+          </AuthForm>
+        </AuthTemplate>
+      </div>
       <div className={styles.right}></div>
     </div>
   );

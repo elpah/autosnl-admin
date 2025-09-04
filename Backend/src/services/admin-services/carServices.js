@@ -6,11 +6,27 @@ import { randomUUID } from "crypto";
 
 const addNewCar = async (carData) => {
   try {
+    const numericFields = [
+      "price_incl_btw",
+      "price_excl_btw",
+      "price_excl_bpm",
+      "carMileage",
+      "carERD",
+      "carVat",
+    ];
+
+    numericFields.forEach((field) => {
+      if (carData[field] !== undefined) {
+        carData[field] = Number(carData[field]) || 0;
+      }
+    });
+
     const newCar = {
       carId: randomUUID(),
       createdAt: new Date(),
       ...carData,
     };
+
     const db = await connectToDatabase();
     const carsCollection = db.collection("cars");
 

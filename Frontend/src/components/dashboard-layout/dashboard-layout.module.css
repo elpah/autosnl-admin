@@ -10,6 +10,7 @@
     display: flex;
     flex-direction: row;
     .nav_and_body {
+      background-color: #f9f9f9;
       width: 100%;
       .body_container {
         width: 90%;
@@ -29,6 +30,8 @@
           width: 70%;
           margin-left: 25%;
           padding-top: 140px;
+          /* background-color: var(--background-color); */
+          /* background-color: red; */
         }
       }
     }

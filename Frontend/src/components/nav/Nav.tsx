@@ -10,7 +10,7 @@ import { GlobalContext } from "../../context/GlobalContext";
 import styles from "./nav.module.css";
 import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock";
 import { useNavigate } from "react-router-dom";
-import { handleSignOut } from "../../utils/utilFunctions";
+import { getGreeting, handleSignOut } from "../../utils/utilFunctions";
 
 const Nav = () => {
   const [navIsOpen, setNavIsOpen] = useState(false);
@@ -63,8 +63,8 @@ const Nav = () => {
       <nav>
         <div className={styles.hamburger_container}>
           <div className={styles.greeting_name_container}>
-            <p className={styles.greetings}>Good Morning</p>
-            <h2 className={styles.name}>Elpah</h2>
+            <p className={styles.greetings}>{getGreeting()}</p>
+            <h2 className={styles.name}>{globalContext.loggedUser.firstname}</h2>
           </div>
           <img
             onClick={() => setNavIsOpen(true)}

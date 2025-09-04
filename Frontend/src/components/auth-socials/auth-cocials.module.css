@@ -12,7 +12,7 @@
     justify-content: center;
     align-items: center;
     background-color: var(--gray-color);
-    padding: 10px 0;
+    padding: 8px 0;
     border-radius: 2px;
 
     .buttonName {
@@ -46,7 +46,7 @@
 @media (min-width: 1200px) {
   .socials_div_container {
     .socials_button {
-      height: 35px;
+      height: 30px;
       .buttonName {
         font-size: 18px;
       }
@@ -57,7 +57,7 @@
 @media (min-width: 1400px) {
   .socials_div_container {
     .socials_button {
-      height: 50px;
+      height: 45px;
 
       .icon_container {
         img {
@@ -65,7 +65,7 @@
         }
       }
       .buttonName {
-        font-size: 22px;
+        font-size: 18px;
       }
     }
   }

@@ -16,26 +16,28 @@ const SignUp = () => {
 
   return (
     <div className={styles.container}>
-      <AuthTemplate
-        handleSubSpanClick={() => navigate("/signin")}
-        orText="or sign up with"
-        logoHeader="ZaurAutos"
-        subText="Already have an account? "
-        subSpanText="Signs in"
-      >
-        <AuthForm
-          loginInfo={signupInfo}
-          setLoginInfo={setSignupInfo}
-          showNameField={true}
-          errorMessage={errorMessage}
+      <div className={styles.left_content}>
+        <AuthTemplate
+          handleSubSpanClick={() => navigate("/signin")}
+          orText="or sign up with"
+          logoHeader="ZaurAutos"
+          subText="Already have an account? "
+          subSpanText="Signs in"
         >
-          <AuthButton
-            handleSubmit={() => console.log("submitted")}
-            text="Sign Up"
-          />
-        </AuthForm>
-      </AuthTemplate>
-      <div className={styles.right}> testing </div>
+          <AuthForm
+            loginInfo={signupInfo}
+            setLoginInfo={setSignupInfo}
+            showNameField={true}
+            errorMessage={errorMessage}
+          >
+            <AuthButton
+              handleSubmit={() => console.log("submitted")}
+              text="Sign Up"
+            />
+          </AuthForm>
+        </AuthTemplate>
+      </div>
+      <div className={styles.right}></div>
     </div>
   );
 };

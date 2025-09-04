@@ -12,7 +12,7 @@ type IAuthFormProps = {
   showNameField?: boolean;
   loginInfo: LoginInfo;
   setLoginInfo: React.Dispatch<React.SetStateAction<LoginInfo>>;
-  errorMessage:string
+  errorMessage: string;
 };
 
 const AuthForm = ({
@@ -21,7 +21,7 @@ const AuthForm = ({
   children,
   loginInfo,
   setLoginInfo,
-  errorMessage
+  errorMessage,
 }: IAuthFormProps) => {
   const handleInputChange =
     (field: keyof LoginInfo) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,9 +58,7 @@ const AuthForm = ({
       />
       <p className={styles.forgot_password}>{subText}</p>
       {children}
-
-     {errorMessage && <p className={styles.error}>{errorMessage}</p>}
-
+      {errorMessage && <p className={styles.error}>{errorMessage}</p>}
     </form>
   );
 };

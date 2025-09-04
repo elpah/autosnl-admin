@@ -151,24 +151,29 @@ const CarList = ({
         }}
       />
       <div className={styles.categories}>
-        <div
-          onClick={() => handleClick("available")}
-          className={`${styles.category_name} ${
-            currentType === "available" ? styles.active : ""
-          }`}
-        >
-          <p>Available Cars</p>
-        </div>
-        <div
-          onClick={() => handleClick("deleted")}
-          className={`${styles.category_name} ${
-            currentType === "deleted" ? styles.active : ""
-          }`}
-        >
-          <p>Deleted Cars</p>
+        <div className={styles.wrap_content}>
+          <div className={styles.avail_delete_container}>
+          <div
+            onClick={() => handleClick("available")}
+            className={`${styles.category_name} ${
+              currentType === "available" ? styles.active : ""
+            }`}
+          >
+            <p>Available Cars</p>
+          </div>
+          <div
+            onClick={() => handleClick("deleted")}
+            className={`${styles.category_name} ${
+              currentType === "deleted" ? styles.active : ""
+            }`}
+          >
+            <p>Deleted Cars</p>
+          </div>
+          </div>
+       
+        <FilterForm />
         </div>
       </div>
-      <FilterForm />
 
       <h2
         className={styles.current_search}

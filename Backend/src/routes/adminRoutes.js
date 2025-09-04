@@ -18,6 +18,7 @@ import {
   addNewDealer,
   addCarIdToDealer,
 } from "../services/admin-services/dealerServices.js";
+import { getUser } from "../services/admin-services/userServices.js";
 
 const adminRouter = Router();
 const storage = multer.memoryStorage();
@@ -61,7 +62,7 @@ adminRouter.put("/update-car", async (req, res) => {});
 
 adminRouter.post("/add-car", upload, async (req, res) => {
   try {
-    const carData = JSON.parse(req.body.carData);
+    let carData = JSON.parse(req.body.carData);
     const carImages = req.files;
 
     const uploadedImages = await Promise.all(
@@ -76,6 +77,7 @@ adminRouter.post("/add-car", upload, async (req, res) => {
         };
       })
     );
+
     carData.carImages = uploadedImages;
     if (!carData.dealer.isOther) {
       carData.dealer = carData.dealer.dealerId;
@@ -220,6 +222,28 @@ adminRouter.patch("/recommend-car", async (req, res) => {
       console.error("Error recommending car:", err);
     }
     res.status(500).send("Internal Server Error");
+  }
+});
+
+adminRouter.get("/users/get-or-create", async (req, res) => {
+  try {
+    const { firebaseUid = "", email = "" } = req.query;
+    if (!firebaseUid || !email) {
+      return res
+        .status(400)
+        .json({ message: "firebaseUid and email are required" });
+    }
+
+    const user = await getUser(firebaseUid, email);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Internal Server Error", error: error.message });
   }
 });
 

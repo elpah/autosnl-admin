@@ -79,7 +79,7 @@ const CarCard = ({
           </div>
         )}
         {deletedButtons && (
-          <div className={styles.buttons}>
+          <div className={`${styles.delete_restore_buttons} ${styles.buttons}`}>
             <button
               className={styles.restore}
               onClick={() => handleRestore(carId)}

@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import SignIn from "./pages/signin/SignIn";
 import SignUp from "./pages/signup/SignUp";
@@ -26,7 +26,7 @@ import AddCarPage from "./pages/addCarPage/AddCarPage";
 import EditCarPage from "./pages/editCarPage/EditCarPage";
 import NotFound from "./pages/notFoundPage/NotFound";
 import ShowModal from "./components/show-modal/ShowModal";
-import { onAuthStateChanged, User } from "firebase/auth";
+import { onAuthStateChanged, User, signOut } from "firebase/auth";
 import { auth } from "./firebase.ts";
 import Loader from "./components/loader/Loader.tsx";
 import HomeRedirect from "./pages/homeRedirect/HomeRedirect.tsx";
@@ -55,16 +55,50 @@ function App() {
   const [getCarsParams, setGetCarsParams] =
     useState<GetCarsParams>(initialGetCarsParams);
 
-  const { data } = useGetUser(
-    authUser?.uid || "",
-    authUser?.email || ""
-  );
+  const INACTIVITY_LIMIT = 30 * 60 * 1000;
+  const inactivityTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const { data } = useGetUser(authUser?.uid || "", authUser?.email || "");
   useEffect(() => {
     if (data) {
       setLoggedUser(data);
     }
   }, [data]);
-  
+
+  const resetTimer = () => {
+    if (inactivityTimer.current) clearTimeout(inactivityTimer.current);
+
+    inactivityTimer.current = setTimeout(() => {
+      if (auth.currentUser) {
+        signOut(auth)
+          .then(() => console.log("User logged out due to inactivity"))
+          .catch((err) => console.error(err));
+        navigate("/signin");
+      }
+    }, INACTIVITY_LIMIT);
+  };
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setAuthUser(user);
+      setAuthLoading(false);
+
+      if (user) {
+        resetTimer();
+      } else {
+        if (inactivityTimer.current) clearTimeout(inactivityTimer.current);
+      }
+    });
+    const events = ["mousemove", "keydown", "scroll", "click", "touchstart"];
+    events.forEach((event) => window.addEventListener(event, resetTimer));
+
+    return () => {
+      unsubscribe();
+      events.forEach((event) => window.removeEventListener(event, resetTimer));
+      if (inactivityTimer.current) clearTimeout(inactivityTimer.current);
+    };
+  }, []);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -175,7 +209,6 @@ function App() {
             <Route path="/settings" element={<SettingPage />} />
             <Route path="/cars/edit/:id" element={<EditCarPage />} />
             <Route path="*" element={<NotFound />} />
-            EditCarPage
           </Routes>
         </Suspense>
       </GlobalContext.Provider>

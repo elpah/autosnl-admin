@@ -1,5 +1,4 @@
 import { useContext, useState } from "react";
-
 import PasswordInput from "../passwordInput/PasswordInput";
 import styles from "./settings-section.module.css";
 import { GlobalContext, type IUser } from "../../context/GlobalContext";

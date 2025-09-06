@@ -10,11 +10,11 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const streamUpload = (fileBuffer) => {
+const streamUpload = (fileBuffer, folder) => {
   return new Promise((resolve, reject) => {
     const stream = cloudinary.v2.uploader.upload_stream(
       {
-        folder: "zaurautosimages",
+        folder: folder,
         quality: "auto",
         width: 800,
         height: 600,
@@ -37,11 +37,11 @@ const streamUpload = (fileBuffer) => {
   });
 };
 
-const uploadImage = async (file) => {
+const uploadImage = async (file, folder) => {
   if (!file || !file.buffer) {
     throw new Error("File buffer is missing");
   }
-  const result = await streamUpload(file.buffer);
+  const result = await streamUpload(file.buffer, folder);
   return result;
 };
 

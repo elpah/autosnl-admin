@@ -6,14 +6,12 @@ const useEditUser = () => {
   return useMutation({
     mutationFn: async (userData: IUser) => {
       const formData = new FormData();
-
       formData.append("userData", JSON.stringify(userData));
-
-      formData.append("userimage", userData.profileImage);
+      formData.append("profileImage", userData.profileImage);
 
       try {
-        const response = await axios.post(
-          `${import.meta.env.VITE_API_URL}users/create-edit-user`,
+        const response = await axios.patch(
+          `${import.meta.env.VITE_API_URL}users/edit-user`,
           formData,
           {
             headers: {

@@ -1,14 +1,19 @@
-import { useContext, useState } from "react";
-import PasswordInput from "../passwordInput/PasswordInput";
+import { useContext, useEffect, useState } from "react";
+// import PasswordInput from "../passwordInput/PasswordInput";
 import styles from "./settings-section.module.css";
 import { GlobalContext, type IUser } from "../../context/GlobalContext";
+import { profile_icon } from "../../assets/images/images";
+import useEditUser from "../../hooks/useEditUser";
 const SettingsSection = () => {
   const globalContext = useContext(GlobalContext);
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmNewPassword, setConfirmNewPassword] = useState("");
-
   const [userInfo, setUserInfo] = useState<IUser>(globalContext.loggedUser);
+  const { mutate: editUser } = useEditUser();
+
+  useEffect(() => {
+    if (globalContext.loggedUser) {
+      setUserInfo(globalContext.loggedUser);
+    }
+  }, [globalContext.loggedUser]);
 
   const handleChange = (field: keyof IUser, value: string | File) => {
     setUserInfo((prev) => ({
@@ -16,23 +21,60 @@ const SettingsSection = () => {
       [field]: value,
     }));
   };
+  const handleSave = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!userInfo) return;
+
+    editUser(userInfo, {
+      onSuccess: (updatedUser) => {
+        globalContext.setLoggedUser(updatedUser);
+        console.log("User updated:", updatedUser);
+      },
+      onError: (err) => {
+        console.error("Failed to update user:", err);
+      },
+    });
+  };
+
+  useEffect(
+    () => console.log(globalContext.loggedUser),
+    [globalContext.loggedUser]
+  );
+
 
   return (
     <div className={styles.container}>
+      <form className={styles.form} onSubmit={handleSave}>
       <div className={styles.left}>
         <h2>Account Settings</h2>
-        <div className={styles.image_container_wrapper}>
-          <div className={styles.image_container}>
+        <label htmlFor="file-upload" className={styles.image_container_wrapper}>
+          <input
+            id="file-upload"
+            type="file"
+            accept="image/*"
+            multiple={false}
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (!file) return;
+              handleChange("profileImage", file);
+            }}
+            className={styles.hidden_input}
+          />
+          <div
+            className={styles.image_container}
+            onDragOver={(e) => e.preventDefault()}
+          >
             <img
               className={styles.image}
               src={
-                typeof userInfo.profileImage === "string"
-                  ? userInfo.profileImage
-                  : userInfo.profileImage
-                  ? URL.createObjectURL(userInfo.profileImage)
-                  : undefined
+                userInfo.profileImage
+                  ? typeof userInfo.profileImage === "string"
+                    ? userInfo.profileImage
+                    : URL.createObjectURL(userInfo.profileImage)
+                  : profile_icon
               }
-              alt="profile photo"
+              alt="Profile Photo"
             />
             <div className={styles.icon_text}>
               <svg
@@ -51,12 +93,12 @@ const SettingsSection = () => {
                 <line x1="12" x2="12" y1="3" y2="15" />
               </svg>
               <p className={styles.upload_text}>Upload Photo</p>
-            </div>
+            </div>{" "}
           </div>
-        </div>
+        </label>
       </div>
       <div className={styles.right}>
-        <form className={styles.personal_info}>
+        <div className={styles.personal_info}>
           <label htmlFor="">Full name</label>
           <div className={styles.names_container}>
             <input
@@ -72,8 +114,6 @@ const SettingsSection = () => {
               onChange={(e) => handleChange("lastname", e.target.value)}
             />
           </div>
-          {/* <label htmlFor="">Username</label>
-          <input type="text" placeholder="Enter your Username" /> */}
           <label htmlFor="">Email</label>
           <input
             value={userInfo.email}
@@ -83,9 +123,11 @@ const SettingsSection = () => {
             id=""
             placeholder="Enter your email"
           />
-          <button>Save changes</button>
-        </form>
-        <form className={styles.password_reset}>
+          <button type="submit">
+            Save changes
+          </button>
+        </div>
+        {/* <form className={styles.password_reset}>
           <h2>Change Password</h2>
           <label htmlFor="">Current Password</label>
           <PasswordInput
@@ -108,8 +150,9 @@ const SettingsSection = () => {
             onChange={(e) => setConfirmNewPassword(e.target.value)}
           />
           <button>Submit</button>
-        </form>
+        </form> */}
       </div>
+      </form>
     </div>
   );
 };

@@ -37,4 +37,54 @@ const getUser = async (firebaseUid, email) => {
   }
 };
 
-export { getUser };
+
+const editUser = async (
+  firebaseUid,
+  email,
+  firstname,
+  lastname,
+  profileImage
+) => {
+  try {
+    const db = await connectToDatabase();
+    const userCol = db.collection("users");
+
+    // ✅ Find the existing user
+    const existingUser = await userCol.findOne({ firebaseUid, email });
+
+    if (!existingUser) {
+      throw new Error("User not found");
+    }
+
+    // ✅ Prepare update data
+    const updatedData = {
+      firstname,
+      lastname,
+      profileImage,
+      email,
+      updatedAt: new Date(),
+    };
+
+    // ✅ Update the user document
+    const result = await userCol.updateOne(
+      { firebaseUid, email },
+      { $set: updatedData }
+    );
+
+    if (result.modifiedCount > 0) {
+      // ✅ Return updated user
+      return {
+        ...existingUser,
+        ...updatedData,
+      };
+    }
+
+    return existingUser; // If nothing changed, return the old one
+  } catch (err) {
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Error in editUser:", err.message);
+    }
+    return null;
+  }
+};
+export { getUser, editUser };

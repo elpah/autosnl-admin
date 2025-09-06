@@ -24,6 +24,8 @@ const adminRouter = Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage }).array("carImages[]");
 
+const uploadProfile = multer({ storage }).single("profileImage");
+
 const fetchRes = async (res, fetchFunction) => {
   try {
     const cars = await fetchFunction();
@@ -67,7 +69,7 @@ adminRouter.post("/add-car", upload, async (req, res) => {
 
     const uploadedImages = await Promise.all(
       carImages.map(async (file) => {
-        const uploaded = await uploadImage(file);
+        const uploaded = await uploadImage(file, "zaurautosimages");
         if (!uploaded || !uploaded.url) {
           throw new Error("Image upload failed or did not return a URL");
         }
@@ -241,6 +243,34 @@ adminRouter.get("/users/get-or-create", async (req, res) => {
     res.status(200).json(user);
   } catch (error) {
     console.error(error);
+    res
+      .status(500)
+      .json({ message: "Internal Server Error", error: error.message });
+  }
+});
+
+adminRouter.patch("/users/edit-user", uploadProfile, async (req, res) => {
+  try {
+    let userData = JSON.parse(req.body.userData);
+    const profileImage = req.file;
+
+    if (profileImage) {
+      const uploaded = await uploadImage(profileImage, "zaurautoprofileimages");
+      if (!uploaded || !uploaded.url) {
+        throw new Error("Image upload failed or did not return a URL");
+      }
+      userData.profileImage = {
+        url: uploaded.url,
+        public_id: uploaded.public_id,
+      };
+    }
+
+    console.log(userData);
+
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error("Error in get-or-create:", error);
     res
       .status(500)
       .json({ message: "Internal Server Error", error: error.message });

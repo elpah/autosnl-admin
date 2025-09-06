@@ -18,7 +18,7 @@ import upload_icon from "./icons/upload.png"
 import basic_map from "./icons/basic_map.svg";
 
 //delete late
-import profile_icon from "./icons/passport_placeholder.jpg";
+import profile_icon from "./icons/placeholder.webp";
 
 import body from "./carPageImages/body.svg";
 import color from "./carPageImages/color.svg";

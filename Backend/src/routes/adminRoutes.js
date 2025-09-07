@@ -18,7 +18,7 @@ import {
   addNewDealer,
   addCarIdToDealer,
 } from "../services/admin-services/dealerServices.js";
-import { getUser } from "../services/admin-services/userServices.js";
+import { editUser, getUser } from "../services/admin-services/userServices.js";
 
 const adminRouter = Router();
 const storage = multer.memoryStorage();
@@ -264,13 +264,10 @@ adminRouter.patch("/users/edit-user", uploadProfile, async (req, res) => {
         public_id: uploaded.public_id,
       };
     }
+    const updateResponse = await editUser(userData);
 
-    console.log(userData);
-
-
-    res.status(200).json(user);
+    res.status(200).json(updateResponse.user);
   } catch (error) {
-    console.error("Error in get-or-create:", error);
     res
       .status(500)
       .json({ message: "Internal Server Error", error: error.message });

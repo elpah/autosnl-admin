@@ -1,5 +1,6 @@
 import { connectToDatabase } from "../../config/db.js";
 import { randomUUID } from "crypto";
+import { deleteCloudinaryImage } from "./cloudinary.js";
 
 const getUser = async (firebaseUid, email) => {
   try {
@@ -11,6 +12,9 @@ const getUser = async (firebaseUid, email) => {
     );
 
     if (user) {
+      if (user.profileImage && user.profileImage.url) {
+        user.profileImage = user.profileImage.url;
+      }
       return user;
     }
 
@@ -37,54 +41,65 @@ const getUser = async (firebaseUid, email) => {
   }
 };
 
-
-const editUser = async (
+const editUser = async ({
   firebaseUid,
   email,
   firstname,
   lastname,
-  profileImage
-) => {
+  profileImage, // Expecting { public_id, url }
+}) => {
   try {
     const db = await connectToDatabase();
     const userCol = db.collection("users");
 
-    // ✅ Find the existing user
     const existingUser = await userCol.findOne({ firebaseUid, email });
+    if (!existingUser)
+      return { success: false, message: "Failed to update: user not found" };
 
-    if (!existingUser) {
-      throw new Error("User not found");
+    const updatedData = {};
+    if (firstname) updatedData.firstname = firstname;
+    if (lastname) updatedData.lastname = lastname;
+
+    if (profileImage && profileImage.public_id && profileImage.url) {
+      if (existingUser.profileImage && existingUser.profileImage.public_id) {
+        try {
+          await deleteCloudinaryImage(existingUser.profileImage.public_id);
+        } catch (err) {
+          console.error("⚠️ Failed to delete old image:", err.message);
+        }
+      }
+
+      updatedData.profileImage = profileImage;
     }
 
-    // ✅ Prepare update data
-    const updatedData = {
-      firstname,
-      lastname,
-      profileImage,
-      email,
-      updatedAt: new Date(),
-    };
+    if (Object.keys(updatedData).length === 0)
+      return { success: true, user: existingUser };
 
-    // ✅ Update the user document
+    updatedData.updatedAt = new Date();
     const result = await userCol.updateOne(
       { firebaseUid, email },
       { $set: updatedData }
     );
 
     if (result.modifiedCount > 0) {
-      // ✅ Return updated user
+      const updatedUser = { ...existingUser, ...updatedData };
+      if (updatedUser.profileImage && updatedUser.profileImage.url) {
+        updatedUser.profileImage = updatedUser.profileImage.url;
+      }
+
+      return { success: true, user: updatedUser };
+    } else {
       return {
-        ...existingUser,
-        ...updatedData,
+        success: false,
+        message: "Failed to update: no changes applied",
       };
     }
-
-    return existingUser; // If nothing changed, return the old one
   } catch (err) {
     if (process.env.NODE_ENV !== "production") {
       console.error("Error in editUser:", err.message);
     }
-    return null;
+    return { success: false, message: "Failed to update" };
   }
 };
+
 export { getUser, editUser };

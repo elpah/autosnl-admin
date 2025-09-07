@@ -2,7 +2,6 @@ import hamburger_open from "./icons/hamburger_open.svg";
 import hamburger_close from "./icons/hamburger_close.svg";
 import fb_icon from "./icons/fb_icon.svg";
 import google_icon from "./icons/google_icon.svg";
-import bell_icon from "./icons/bell_icon.svg";
 
 import total_cars from "./icons/total_cars.svg";
 import total_used from "./icons/total_used.svg";
@@ -53,7 +52,6 @@ export {
   hamburger_close,
   fb_icon,
   google_icon,
-  bell_icon,
   profile_icon,
   total_cars,
   total_damaged,

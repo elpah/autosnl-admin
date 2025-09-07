@@ -28,38 +28,14 @@ header {
         height: 35px;
       }
     }
-    .notification_profile_icons {
-      display: flex;
-      gap: 20px;
-      .notification_alert {
-        position: relative;
-        .notification_icon {
-          width: 35px;
-          height: 35px;
-        }
-        .notification_number {
-          color: #fff;
-          background-color: green;
-          border-radius: 150%;
-          height: auto;
-          width: auto;
-          min-width: 13px;
-          min-height: 13px;
-          aspect-ratio: 1 / 1;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          position: absolute;
-          top: -4px;
-          right: 0px;
-          font-weight: 700;
-          padding: 1px;
-          font-size: 8px;
-        }
-      }
+    .profile_icon_container {
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+
       .profile_icon {
-        width: 35px;
-        height: 35px;
+        width: 100%;
+        height: 100%;
         border-radius: 50%;
         border: 2px solid #565656;
       }
@@ -147,22 +123,9 @@ header {
           height: 40px;
         }
       }
-      .notification_profile_icons {
+      .profile_icon_container {
         gap: 30px;
-        .notification_alert {
-          .notification_icon {
-            height: 35px;
-            width: 35px;
-          }
-          .notification_number {
-            background-color: green;
 
-            min-width: 15px;
-            min-height: 15px;
-
-            font-weight: 800;
-          }
-        }
         .profile_icon {
           width: 35px;
           height: 35px;
@@ -222,18 +185,7 @@ header {
           }
         }
       }
-      .notification_profile_icons {
-        .notification_alert {
-          .notification_icon {
-            height: 40px;
-            width: 40px;
-          }
-          .notification_number {
-            min-width: 16px;
-            min-height: 16px;
-            font-size: 11px;
-          }
-        }
+      .profile_icon_container {
         .profile_icon {
           height: 40px;
           width: 40px;

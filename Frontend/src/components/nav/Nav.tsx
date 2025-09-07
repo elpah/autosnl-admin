@@ -2,11 +2,9 @@ import { useContext, useEffect, useRef, useState } from "react";
 import {
   hamburger_open,
   hamburger_close,
-  bell_icon,
   profile_icon,
 } from "../../assets/images/images";
 import { GlobalContext } from "../../context/GlobalContext";
-
 import styles from "./nav.module.css";
 import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock";
 import { useNavigate } from "react-router-dom";
@@ -64,7 +62,9 @@ const Nav = () => {
         <div className={styles.hamburger_container}>
           <div className={styles.greeting_name_container}>
             <p className={styles.greetings}>{getGreeting()}</p>
-            <h2 className={styles.name}>{globalContext.loggedUser.firstname}</h2>
+            <h2 className={styles.name}>
+              {globalContext.loggedUser.firstname}
+            </h2>
           </div>
           <img
             onClick={() => setNavIsOpen(true)}
@@ -75,15 +75,16 @@ const Nav = () => {
             height={30}
           />
         </div>
-        <div className={styles.notification_profile_icons}>
-          <div className={styles.notification_alert}>
-            <img className={styles.notification_icon} src={bell_icon} alt="" />
-            <p className={styles.notification_number}>20+</p>
-          </div>
-
+        <div className={styles.profile_icon_container}>
           <img
             className={styles.profile_icon}
-            src={profile_icon}
+            src={
+              globalContext.loggedUser.profileImage
+                ? globalContext.loggedUser.profileImage instanceof File
+                  ? URL.createObjectURL(globalContext.loggedUser.profileImage)
+                  : globalContext.loggedUser.profileImage
+                : profile_icon
+            }
             alt="profile picture"
           />
         </div>

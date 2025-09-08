@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useCallback } from "react";
+import { auth } from "../firebase.ts";
 import {
   type IDealer,
   type ICarData,
@@ -17,12 +18,23 @@ const useGetAllCars = (
   params: GetCarsParams,
   type: "available" | "deleted"
 ) => {
-  const fetchCars = useCallback(() => {
-    return axios
-      .get<ICarResponse>(`${import.meta.env.VITE_API_URL}admin-get-all-cars`, {
+  const fetchCars = useCallback(async () => {
+    const user = auth.currentUser;
+    if (!user) throw new Error("User not logged in");
+
+    const token = await user.getIdToken();
+
+    const res = await axios.get<ICarResponse>(
+      `${import.meta.env.VITE_API_URL}admin-get-all-cars`,
+      {
         params: { ...params, type },
-      })
-      .then((res) => res.data);
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return res.data;
   }, [params, type]);
 
   return useQuery<ICarResponse, Error>({
@@ -32,4 +44,5 @@ const useGetAllCars = (
     // refetchOnWindowFocus: false,
   });
 };
+
 export default useGetAllCars;

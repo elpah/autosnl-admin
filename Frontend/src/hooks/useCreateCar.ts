@@ -1,12 +1,17 @@
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { type ICarData } from "../context/GlobalContext";
+import { auth } from "../firebase.ts";
 
 const useCreateCar = () => {
   return useMutation({
     mutationFn: async (carData: ICarData) => {
-      const formData = new FormData();
+      const user = auth.currentUser;
+      if (!user) throw new Error("User not logged in");
 
+      const token = await user.getIdToken();
+
+      const formData = new FormData();
       formData.append("carData", JSON.stringify(carData));
 
       carData.carImages.forEach((image) => {
@@ -20,6 +25,7 @@ const useCreateCar = () => {
           {
             headers: {
               "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
             },
           }
         );

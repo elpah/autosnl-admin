@@ -1,6 +1,7 @@
 import "dotenv/config.js";
 import Router from "express";
 import multer from "multer";
+import { verifyAdmin } from "../middleware/authMiddleware.js";
 import { uploadImage } from "../services/admin-services/cloudinary.js";
 import { getBrandModelsCountries } from "../services/admin-services/brandModelCountryServices.js";
 import {
@@ -21,6 +22,8 @@ import {
 import { editUser, getUser } from "../services/admin-services/userServices.js";
 
 const adminRouter = Router();
+adminRouter.use(verifyAdmin);
+
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage }).array("carImages[]");
 

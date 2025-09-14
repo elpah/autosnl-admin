@@ -192,7 +192,7 @@ const CarList = ({
             dealer={car.dealer ? car.dealer.toString() : ""}
             imageSrc={car.carImages[0]}
             recommendText={
-              car.isRecommended === true ? "Unrecommended" : "Recommended"
+              car.isRecommended === true ? "Unrecommend" : "Recommend"
             }
             handleEditClick={() => handleEditClick(car.carId!)}
             handleDeleteClick={() => openSoftDeleteModal(car.carId!)}

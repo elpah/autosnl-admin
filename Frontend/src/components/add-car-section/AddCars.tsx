@@ -45,29 +45,29 @@ const AddCars = () => {
   const handleNext = () => {
     handleScrollToTop();
     const requiredBasicFields = [
-      // "carType",
-      // "carBrand",
-      // "carModel",
-      // "carBody",
-      // "carColor",
-      // "carTransmission",
-      // "carCountry",
-      // "carFuel",
-      // "carVanish",
+      "carType",
+      "carBrand",
+      "carModel",
+      "carBody",
+      "carColor",
+      "carTransmission",
+      "carCountry",
+      "carFuel",
+      "carVanish",
     ] as const;
 
     const requiredAdvancedFields: Array<keyof ICarData> = [
       "carImages",
-      // "carMileage",
-      // "carPower",
-      // "carEngineCapacity",
-      // "carERD",
-      // "carMODTill",
-      // "price_incl_btw",
-      // "price_excl_btw",
-      // "price_excl_bpm",
-      // "carVat",
-      // "carNumberOfDoors",
+      "carMileage",
+      "carPower",
+      "carEngineCapacity",
+      "carERD",
+      "carMODTill",
+      "price_incl_btw",
+      "price_excl_btw",
+      "price_excl_bpm",
+      "carVat",
+      "carNumberOfDoors",
     ];
 
     const langs: Lang[] = ["en", "nl", "ru", "ua"];
